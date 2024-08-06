@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './modules/users/users.module';
+import {
+  UsersModule,
+  RegionsModule,
+  FacilitiesModule,
+  ServicesModule,
+} from '@modules';
 import { HealthController } from 'health.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmConfig } from 'config';
+import { ApplicationModule } from 'modules/application/application.module';
 
 @Module({
   imports: [
@@ -20,6 +26,10 @@ import { TypeOrmConfig } from 'config';
       inject: [ConfigService],
     }),
     UsersModule,
+    RegionsModule,
+    ServicesModule,
+    ApplicationModule,
+    FacilitiesModule,
   ],
   controllers: [HealthController],
   providers: [],

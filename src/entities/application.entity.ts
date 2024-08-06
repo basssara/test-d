@@ -1,13 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { UserEntity } from './users.entity';
 import { ApplicationModel } from '@interfaces';
-
-export enum ApplicationStatus {
-  ACCEPTED = 'accepted',
-  PENDING = 'pending',
-  COMPLETED = 'completed',
-  CANCELLED = 'cancelled',
-}
+import { Statuses } from 'enums/status.enum';
 
 @Entity('applications')
 export class ApplicationEntity implements Pick<ApplicationModel, 'pinfl'> {
@@ -27,8 +21,8 @@ export class ApplicationEntity implements Pick<ApplicationModel, 'pinfl'> {
 
   @Column({
     type: 'enum',
-    enum: ApplicationStatus,
-    default: ApplicationStatus.PENDING,
+    enum: Statuses,
+    default: Statuses.PENDING,
   })
   applicationStatus: string;
 

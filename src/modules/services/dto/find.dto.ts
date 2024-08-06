@@ -1,4 +1,4 @@
-import type { FindServiceRequest } from '../interfaces';
+import type { FindServiceRequest } from '@interfaces';
 import { IsNotEmpty, IsUUID } from 'class-validator';
 
 export class FindServiceRequestDto implements FindServiceRequest {

@@ -1,4 +1,4 @@
-import type { UpdateServiceRequest } from '../interfaces';
+import type { UpdateServiceRequest } from '@interfaces';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class UpdateServiceRequestDto

@@ -1,4 +1,4 @@
-import type { CreateServiceRequest } from '../interfaces';
+import type { CreateServiceRequest } from '@interfaces';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateServiceRequestDto

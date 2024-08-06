@@ -11,6 +11,9 @@
       ],
       "@interfaces": [
         "./interfaces"
+      ],
+      "@modules": [
+        "./modules"
       ]
     },
     "strict": true,

@@ -1,4 +1,4 @@
-import { CreateUserRequest } from '@interfaces';
+import type { CreateUserRequest } from '@interfaces';
 
 export class CreateUserRequestDto implements CreateUserRequest {
   login: string;

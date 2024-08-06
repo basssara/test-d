@@ -9,7 +9,10 @@ import {
 } from '@nestjs/common';
 import { ServicesService } from './services.service';
 
-@Controller('services')
+@Controller({
+  path: 'services',
+  version: '1',
+})
 export class ServicesController {
   constructor(private readonly service: ServicesService) {}
 

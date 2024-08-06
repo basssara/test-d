@@ -1,4 +1,4 @@
-import { UpdateUserRequest } from 'interfaces/user.interface';
+import type { UpdateUserRequest } from '@interfaces';
 
 export class UpdateUserDto implements UpdateUserRequest {
   id: string;

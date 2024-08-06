@@ -1,4 +1,4 @@
-export enum Status {
+export enum Statuses {
   ACCEPTED = 'accepted',
   PAYMENT_ACCEPTED = 'payment',
   PROCEEDING = 'proceeding',

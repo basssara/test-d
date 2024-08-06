@@ -3,7 +3,7 @@ import {
   CreateServiceRequest,
   FindServiceRsponse,
   UpdateServiceRequest,
-} from './interfaces';
+} from '@interfaces';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ServiceEntity } from 'entities';
 import { Repository } from 'typeorm';

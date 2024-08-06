@@ -1,8 +1,8 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { ApplicationEntity, ApplicationStatus, ServiceEntity } from 'entities';
+import { Injectable } from '@nestjs/common';
+import { ApplicationEntity, ServiceEntity } from 'entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { SendApplicationRequest } from '@interfaces';
+// import { SendApplicationRequest } from '@interfaces';
 
 @Injectable()
 export class ApplicationService {
@@ -12,7 +12,9 @@ export class ApplicationService {
     private readonly applicationRepository: Repository<ApplicationEntity>,
   ) {}
 
-  async create(data: SendApplicationRequest) {}
+  async create(data: any) {
+    return data;
+  }
 
   findAll() {
     return `This action returns all application`;
