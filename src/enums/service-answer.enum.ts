@@ -1,0 +1,7 @@
+export enum ServiceAnswers {
+  OK = 1,
+  SERVICE_ERROR = 0,
+  INFRORMATION_ERROR = 2,
+  INFROMATION_NOT_FOUND = 5,
+  INFORMATION_FOUND = 7,
+}

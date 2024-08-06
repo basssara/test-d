@@ -1,0 +1,32 @@
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { ApplicationEntity, ApplicationStatus, ServiceEntity } from 'entities';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { SendApplicationRequest } from '@interfaces';
+
+@Injectable()
+export class ApplicationService {
+  constructor(
+    @InjectRepository(ServiceEntity)
+    private readonly serviceRepository: Repository<ServiceEntity>,
+    private readonly applicationRepository: Repository<ApplicationEntity>,
+  ) {}
+
+  async create(data: SendApplicationRequest) {}
+
+  findAll() {
+    return `This action returns all application`;
+  }
+
+  findOne(id: string) {
+    return `This action returns a #${id} application`;
+  }
+
+  // update(id: string, data: UpdateApplicationDto) {
+  //   return `This action updates a #${id} application`;
+  // }
+
+  remove(id: string) {
+    return `This action removes a #${id} application`;
+  }
+}
