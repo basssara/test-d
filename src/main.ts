@@ -3,6 +3,8 @@ import { App } from './app';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { json } from 'express';
 import { appConfig } from 'config';
+import session = require('express-session');
+import { sessionConstants } from 'constanst/session.constant';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(App);
@@ -10,6 +12,18 @@ async function bootstrap() {
   app.use(
     json({
       limit: '5mb',
+    }),
+  );
+
+  app.use(
+    session({
+      name: 'SESSION_ID',
+      secret: sessionConstants.secret,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      },
     }),
   );
 

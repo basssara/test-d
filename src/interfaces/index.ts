@@ -1,3 +1,4 @@
+export type { LoginRequest, LoginResponse } from './auth.interface';
 export type {
   UserModel,
   CreateUserRequest,
@@ -21,3 +22,4 @@ export type {
   SendApplicationRequest,
   SendApplicationResponse,
 } from './application.interface';
+export type { JwtModel } from './jwt.interface';

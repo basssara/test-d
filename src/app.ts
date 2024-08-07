@@ -10,6 +10,7 @@ import { HealthController } from 'health.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmConfig } from 'config';
 import { ApplicationModule } from 'modules/application/application.module';
+import { AuthModule } from 'auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ApplicationModule } from 'modules/application/application.module';
     ServicesModule,
     ApplicationModule,
     FacilitiesModule,
+    AuthModule,
   ],
   controllers: [HealthController],
   providers: [],

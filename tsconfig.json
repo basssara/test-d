@@ -16,6 +16,10 @@
         "./modules"
       ]
     },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./srs/types"
+    ],
     "strict": true,
     "declaration": true,
     "skipLibCheck": true,

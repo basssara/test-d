@@ -1,13 +1,14 @@
 import { AccessRoles } from 'enums/roles.enum';
 
 export interface UserModel {
-  id?: string; //guid or uuid
+  id: string; //guid or uuid
   login: string;
   password: string;
-  status?: string; //Record status
-  pinpp: string; //pinfl
-  doctype?: any; //
-  serialNumber: string;
+  // uniqueId: string;
+  // status?: string; //Record status
+  // pinpp: string; //pinfl
+  // doctype?: any; //
+  // serialNumber: string;
   accesRoles?: AccessRoles[]; //in db
   createdAt: Date;
   updatedAt: Date;
@@ -21,11 +22,14 @@ export interface CreateUserRequest {
 }
 
 export interface GetUserRequest {
-  id: string;
+  login: string;
 }
 
 export interface GetUserResponse {
   id: string;
+  login: string;
+  password: string;
+  role: AccessRoles[];
 }
 
 export interface UpdateUserRequest {
