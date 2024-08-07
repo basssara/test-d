@@ -3,3 +3,7 @@ export interface RegionModel {
   regionName: string;
   userId: string;
 }
+
+export interface CreateRegionRequest {
+  regionName: string;
+}

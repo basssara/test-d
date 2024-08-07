@@ -33,10 +33,10 @@ export interface GetUserResponse {
 }
 
 export interface UpdateUserRequest {
-  id: string;
-  login: string;
-  password: string;
-  role: string[];
+  id?: string;
+  login?: string;
+  password?: string;
+  role?: string[];
 }
 
 export interface DeleteUserRequest {

@@ -27,7 +27,7 @@ export interface DeleteServiceRequest {
   id: string;
 }
 
-export interface ServiceResponse {
+export interface ServiceModelResponse {
   AnswereId: number;
   AnswereMessage: string;
   AnswereComment: string;

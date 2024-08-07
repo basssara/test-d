@@ -43,4 +43,6 @@ export class AuthService {
       refreshToken,
     };
   }
+
+  async logout(): Promise<void> {}
 }
