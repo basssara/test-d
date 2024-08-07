@@ -5,9 +5,20 @@ import { json } from 'express';
 import { appConfig } from 'config';
 import session = require('express-session');
 import { sessionConstants } from 'constanst/session.constant';
+import { VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(App);
+  const app = await NestFactory.create<NestExpressApplication>(App, {
+    cors: {
+      maxAge: 0,
+      methods: ['*'],
+      credentials: false,
+      allowedHeaders: ['*'],
+      exposedHeaders: [],
+      preflightContinue: false,
+      optionsSuccessStatus: 200,
+    },
+  });
 
   app.use(
     json({
@@ -26,6 +37,11 @@ async function bootstrap() {
       },
     }),
   );
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+    prefix: 'api/v',
+  });
 
   app.set('env', appConfig.env);
   app.set('etag', 'strong');
