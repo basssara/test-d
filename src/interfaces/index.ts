@@ -23,3 +23,4 @@ export type {
   SendApplicationResponse,
 } from './application.interface';
 export type { JwtModel } from './jwt.interface';
+export type { AsbtCreateRequest, AsbtCreateResponse } from './asbt.interface';

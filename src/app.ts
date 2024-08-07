@@ -8,16 +8,17 @@ import {
 } from '@modules';
 import { HealthController } from 'health.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmConfig } from 'config';
+import { asbtConfig, TypeOrmConfig } from 'config';
 import { ApplicationModule } from 'modules/application/application.module';
 import { AuthModule } from 'auth/auth.module';
+import { AsbtModule } from 'clients';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [TypeOrmConfig],
+      load: [TypeOrmConfig, asbtConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -32,6 +33,7 @@ import { AuthModule } from 'auth/auth.module';
     ApplicationModule,
     FacilitiesModule,
     AuthModule,
+    AsbtModule,
   ],
   controllers: [HealthController],
   providers: [],

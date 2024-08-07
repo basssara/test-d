@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { ServiceEntity } from './services.entity';
 import { UserModel } from '@interfaces';
+import { RecordStatusesForDB } from 'enums/record-statuses.enum';
 
 @Entity('users')
 export class UserEntity implements UserModel {
@@ -10,6 +11,12 @@ export class UserEntity implements UserModel {
 
   @Column({ nullable: true })
   pinpp: string;
+
+  @Column({
+    enum: RecordStatusesForDB,
+    nullable: true,
+  })
+  status: RecordStatusesForDB;
 
   @Column({ type: 'varchar' })
   login: string;
@@ -31,6 +38,12 @@ export class UserEntity implements UserModel {
 
   @OneToMany(() => ServiceEntity, (service) => service.user)
   services: ServiceEntity[];
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  dateTill: Date;
 
   @Column({
     type: 'timestamp',

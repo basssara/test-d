@@ -8,17 +8,20 @@ import { UserEntity } from 'entities';
 import { DeepPartial, Repository } from 'typeorm';
 import { AccessRoles } from 'enums/roles.enum';
 import {
+  AsbtCreateRequest,
   CreateUserRequest,
   GetUserRequest,
   GetUserResponse,
 } from '@interfaces';
 import * as bcrypt from 'bcrypt';
+import { AsbtService } from 'clients';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
+    private readonly asbtService: AsbtService,
   ) {}
 
   async create(data: CreateUserRequest): Promise<void> {
@@ -39,6 +42,45 @@ export class UsersService {
       password: hashedPassword,
       accessRoles: data.role.length === 0 ? AccessRoles.OPERATOR : data.role,
     } as DeepPartial<UserEntity>);
+
+    this.usersRepository.save(user);
+  }
+
+  async createNewUserForAsbt(data: AsbtCreateRequest) {
+    const saltOrRounds = 10;
+
+    const userExists = await this.usersRepository.findOne({
+      where: { login: data.login },
+    });
+
+    if (userExists) {
+      throw new ConflictException('User already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, saltOrRounds);
+
+    const user = this.usersRepository.create({
+      pinpp: data.pinpp,
+      status: data.status,
+      login: data.login,
+      password: hashedPassword,
+      serialNumber: data.serialNumber,
+      accessRoles: data.accesRoles,
+      dateTill: data.dateTill,
+    } as unknown as DeepPartial<UserEntity>);
+
+    this.asbtService.create({
+      id: user.id,
+      pinpp: data.pinpp,
+      status: data.status,
+      doctype: data.doctype,
+      serialNumber: data.serialNumber,
+      accesRoles: data.accesRoles,
+      login: data.login,
+      password: data.password,
+      dateFrom: user.createdAt,
+      dateTill: data.dateTill,
+    });
 
     this.usersRepository.save(user);
   }
