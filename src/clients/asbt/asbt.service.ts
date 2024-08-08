@@ -21,7 +21,7 @@ export interface MessageResponse {
 @Injectable()
 export class AsbtService {
   readonly #_axios: AxiosInstance;
-  readonly token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiIiwiVXNlcklkIjoiMTAwMTAzOCIsIlN1YnN5c3RlbSI6IjEiLCJMT0NBTCBBVVRIT1JJVFkiOiJBc2J0QXV0aDIuMFNlcnZlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IjQwMDAxMDAiLCJuYmYiOjE3MjMwMjY0NTcsImV4cCI6MTcyMzExMjg1NywiaXNzIjoiQXNidEF1dGgyLjBTZXJ2ZXIiLCJhdWQiOiJodHRwOi8vYXNidC51ei8ifQ.sHavzWiaVOZLuqXc50U-S41wYfHtW_K3LoTgsJh8Cdc`;
+  readonly token = process.env.API_TOKEN;
 
   constructor(config: ConfigService) {
     this.#_axios = axios.create({
