@@ -1,34 +1,34 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty } from '@nestjs/swagger';
 
 export class BadRequestResponse {
   @ApiProperty()
-  message: string
+  message: string;
 }
 
 export class UnauthorizedResponse {
   @ApiProperty()
-  message: string
+  message: string;
 }
 
 export class ForbiddenResponse {
   @ApiProperty()
-  message: string
+  message: string;
 }
 
 export class NotFoundResponse {
   @ApiProperty()
-  message: string
+  message: string;
 }
 
 export class UnprocessableEntityResponse {
   @ApiProperty()
-  message: string
+  message: string;
 
   @ApiProperty()
-  details: Record<string, string[]>
+  details: Record<string, string[]>;
 }
 
 export class InternalServerErrorResponse {
   @ApiProperty()
-  message: string
+  message: string;
 }
