@@ -15,6 +15,7 @@ import {
 } from '@interfaces';
 import * as bcrypt from 'bcrypt';
 import { AsbtService } from 'clients';
+import { uuid } from 'helpers';
 
 @Injectable()
 export class UsersService {
@@ -46,8 +47,9 @@ export class UsersService {
     this.usersRepository.save(user);
   }
 
-  async createNewUserForAsbt(data: AsbtCreateRequest) {
+  async createNewUserForAsbt(data: AsbtCreateRequest): Promise<void> {
     const saltOrRounds = 10;
+    const savedUuid = uuid();
 
     const userExists = await this.usersRepository.findOne({
       where: { login: data.login },
@@ -59,18 +61,8 @@ export class UsersService {
 
     const hashedPassword = await bcrypt.hash(data.password, saltOrRounds);
 
-    const user = this.usersRepository.create({
-      pinpp: data.pinpp,
-      status: data.status,
-      login: data.login,
-      password: hashedPassword,
-      serialNumber: data.serialNumber,
-      accessRoles: data.accesRoles,
-      dateTill: data.dateTill,
-    } as unknown as DeepPartial<UserEntity>);
-
-    this.asbtService.create({
-      id: user.id,
+    await this.asbtService.create({
+      id: savedUuid,
       pinpp: data.pinpp,
       status: data.status,
       doctype: data.doctype,
@@ -78,11 +70,20 @@ export class UsersService {
       accesRoles: data.accesRoles,
       login: data.login,
       password: data.password,
-      dateFrom: user.createdAt,
+      dateFrom: new Date(),
       dateTill: data.dateTill,
     });
 
-    this.usersRepository.save(user);
+    await this.usersRepository.save({
+      id: savedUuid,
+      pinpp: data.pinpp,
+      status: data.status,
+      login: data.login,
+      password: hashedPassword,
+      serialNumber: data.serialNumber,
+      accessRoles: data.accesRoles,
+      dateTill: data.dateTill,
+    });
   }
 
   findAll() {
@@ -110,6 +111,8 @@ export class UsersService {
   // }
 
   async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id);
+    await this.usersRepository.update(id, {
+      updatedAt: new Date(),
+    });
   }
 }
