@@ -7,3 +7,12 @@ export interface RegionModel {
 export interface CreateRegionRequest {
   regionName: string;
 }
+
+export interface UpdateRegionRequest {
+  regionName: string;
+}
+
+
+export interface FindRegionRequest {
+  id: string;
+}

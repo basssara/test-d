@@ -1,14 +1,15 @@
-import { Controller, Get, Post, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Param, Delete, Body, Patch } from '@nestjs/common';
 import { RegionsService } from './regions.service';
+import { createRegionDto } from './dto/create.region.dto';
 
-@Controller('regions')
+
+@Controller({
+  path: 'regions',
+  version: '1'
+})
 export class RegionsController {
-  constructor(private readonly regionsService: RegionsService) {}
+  constructor(private readonly regionsService: RegionsService) { }
 
-  @Post()
-  // create(@Body() createRegionDto: any) {
-  //   return this.regionsService.create(createRegionDto);
-  // }
   @Get()
   findAll() {
     return this.regionsService.findAll();
@@ -16,16 +17,21 @@ export class RegionsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.regionsService.findOne(+id);
+    return this.regionsService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateRegionDto: any) {
-  //   return this.regionsService.update(+id, updateRegionDto);
-  // }
+  @Post()
+  create(@Body() dto: createRegionDto) {
+    return this.regionsService.create(dto);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateRegionDto: any) {
+    return this.regionsService.update(id, updateRegionDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.regionsService.remove(+id);
+    return this.regionsService.remove(id);
   }
 }

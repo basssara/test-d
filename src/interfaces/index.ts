@@ -7,7 +7,7 @@ export type {
   UpdateUserRequest,
   DeleteUserRequest,
 } from './user.interface';
-export type { RegionModel } from './region.interface';
+export type { RegionModel, FindRegionRequest, CreateRegionRequest, UpdateRegionRequest } from './region.interface';
 export type {
   ServiceModel,
   CreateServiceRequest,

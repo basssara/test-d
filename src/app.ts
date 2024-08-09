@@ -38,4 +38,4 @@ import { AsbtModule } from 'clients';
   controllers: [HealthController],
   providers: [],
 })
-export class App {}
+export class App { }
