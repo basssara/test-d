@@ -1,7 +1,12 @@
 import { Controller, Get, Post, Param, Delete } from '@nestjs/common';
 import { RegionsService } from './regions.service';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('regions')
+@ApiTags('Regions Service')
+@Controller({
+  path: 'regions',
+  version: '1',
+})
 export class RegionsController {
   constructor(private readonly regionsService: RegionsService) {}
 

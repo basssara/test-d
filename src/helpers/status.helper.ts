@@ -3,7 +3,7 @@ import {
   RecordStatusesForDB,
 } from 'enums/record-statuses.enum';
 
-export const StatusConvert = (status: string) => {
+export const statusConvert = (status: string) => {
   switch (status) {
     case RecordStatusesForDB.ACTIVE_NEW:
       return RecordStatuses.ACTIVE_NEW;

@@ -1,6 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApplicationService } from './application.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Application Service')
 @Controller({
   path: 'application',
   version: '1',

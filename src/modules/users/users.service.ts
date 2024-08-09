@@ -16,6 +16,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { AsbtService } from 'clients';
 import { uuid } from 'helpers';
+import { formatDate } from 'date-fns';
 
 @Injectable()
 export class UsersService {
@@ -62,27 +63,27 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(data.password, saltOrRounds);
 
     await this.asbtService.create({
-      id: savedUuid,
+      guid: savedUuid,
       pinpp: data.pinpp,
       status: data.status,
       doctype: data.doctype,
-      serialNumber: data.serialNumber,
-      accesRoles: data.accesRoles,
+      serialnumber: data.serialnumber,
+      accessRoles: data.accessRoles,
       login: data.login,
       password: data.password,
       dateFrom: new Date(),
       dateTill: data.dateTill,
     });
-
+    console.log('asb moved');
     await this.usersRepository.save({
       id: savedUuid,
       pinpp: data.pinpp,
       status: data.status,
       login: data.login,
       password: hashedPassword,
-      serialNumber: data.serialNumber,
-      accessRoles: data.accesRoles,
-      dateTill: data.dateTill,
+      serialNumber: data.serialnumber,
+      accessRoles: data.accessRoles,
+      dateTill: formatDate(data.dateTill, 'dd-MM-yyyy'),
     });
   }
 
