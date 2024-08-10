@@ -5,7 +5,7 @@ import { LoginResponse } from '@interfaces';
 import { Request } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 
-ApiTags('Auth');
+@ApiTags('Auth')
 @Controller({
   path: 'auth',
   version: '1',

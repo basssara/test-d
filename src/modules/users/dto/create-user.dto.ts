@@ -17,7 +17,9 @@ export class CreateUserRequestDto implements CreateUserRequest {
   role: string[];
 }
 
-export class CreateAsbtRequestDto implements AsbtCreateRequest {
+export class CreateAsbtRequestDto
+  implements Omit<AsbtCreateRequest, 'dateFrom'>
+{
   @IsOptional()
   @IsEnum(RecordStatusesForDB)
   status?: RecordStatusesForDB;
@@ -45,10 +47,6 @@ export class CreateAsbtRequestDto implements AsbtCreateRequest {
   @IsOptional()
   @IsString()
   password?: string;
-
-  @IsOptional()
-  @IsDate()
-  dateFrom: Date;
 
   @IsOptional()
   @IsDate()

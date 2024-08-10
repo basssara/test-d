@@ -48,7 +48,9 @@ export class UsersService {
     this.usersRepository.save(user);
   }
 
-  async createNewUserForAsbt(data: AsbtCreateRequest): Promise<void> {
+  async createNewUserForAsbt(
+    data: Omit<AsbtCreateRequest, 'dateFrom'>,
+  ): Promise<void> {
     const saltOrRounds = 10;
     const savedUuid = uuid();
 
@@ -74,7 +76,9 @@ export class UsersService {
       dateFrom: new Date(),
       dateTill: data.dateTill,
     });
+
     console.log('asb moved');
+
     await this.usersRepository.save({
       id: savedUuid,
       pinpp: data.pinpp,

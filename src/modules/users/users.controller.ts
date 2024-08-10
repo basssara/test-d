@@ -15,6 +15,7 @@ import {
 } from './dto/create-user.dto';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
+  AsbtCreateRequestSwagger,
   ForbiddenResponse,
   InternalServerErrorResponse,
   UnauthorizedResponse,
@@ -37,7 +38,7 @@ export class UsersController {
   @Post('asbt')
   @HttpCode(HttpStatus.OK)
   @ApiBody({
-    type: '',
+    type: AsbtCreateRequestSwagger,
   })
   @ApiResponse({
     status: HttpStatus.OK,
