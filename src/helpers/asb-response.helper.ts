@@ -11,7 +11,6 @@ import { AsbtAnswers } from 'enums/service-answer.enum';
 export const asbtRepsone = (
   res: AsbtCreateResponse,
 ): Promise<AsbtCreateResponse> => {
-  console.log(res);
   switch (res.AnswereId) {
     case AsbtAnswers.OK:
       return;

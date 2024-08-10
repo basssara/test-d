@@ -1,11 +1,12 @@
 import { AsbtCreateRequest, AsbtCreateResponse } from '@interfaces';
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
-  RequestTimeoutException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { asbtRepsone, formatDate, roleConvert, statusConvert } from 'helpers';
 
 @Injectable()
@@ -28,6 +29,12 @@ export class AsbtService {
   }
 
   async create(payload: AsbtCreateRequest): Promise<AsbtCreateResponse> {
+    const result: AsbtCreateResponse = {
+      AnswereId: 0,
+      AnswereMessage: '',
+      AnswereComment: '',
+    };
+
     console.log({
       guid: payload.guid,
       status: statusConvert(payload.status),
@@ -43,11 +50,8 @@ export class AsbtService {
 
     console.log(process.env.ASBT_SERVICE_URL + '/UserManagement/AddUser');
 
-    try {
-      const user = await this.#_axios.request<
-        AsbtCreateRequest,
-        AxiosResponse<AsbtCreateResponse>
-      >({
+    await this.#_axios
+      .request<AsbtCreateRequest, AxiosResponse<AsbtCreateResponse>>({
         url: '/UserManagement/AddUser',
         method: 'POST',
         data: {
@@ -62,19 +66,22 @@ export class AsbtService {
           dateFrom: formatDate(payload.dateFrom, 'dd-MM-yyyy'),
           dateTill: formatDate(payload.dateTill, 'dd-MM-yyyy'),
         },
+      })
+      .then((res: AxiosResponse<AsbtCreateResponse>) => {
+        result.AnswereId = res.data.AnswereId;
+        result.AnswereMessage = res.data.AnswereMessage;
+        result.AnswereComment = res.data.AnswereComment;
+      })
+      .catch((err: AxiosError) => {
+        switch (err.response.status) {
+          case 401:
+            throw new UnauthorizedException(err.response.statusText);
+          case 400:
+            throw new BadRequestException(err.response.statusText);
+          default:
+            throw new InternalServerErrorException(err.response.statusText);
+        }
       });
-
-      return asbtRepsone({
-        AnswereId: user.data.AnswereId,
-        AnswereMessage: user.data.AnswereMessage,
-        AnswereComment: user.data.AnswereComment,
-      });
-    } catch (error: unknown) {
-      if (axios.isCancel(error)) {
-        throw new RequestTimeoutException(error);
-      }
-
-      throw new InternalServerErrorException(error);
-    }
+    return asbtRepsone(result);
   }
 }

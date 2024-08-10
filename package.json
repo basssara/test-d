@@ -8,11 +8,15 @@
     "start": "nest start --config ./nest.config.json",
     "start:debug": "nest start --config ./nest.config.json --debug --watch",
     "start:watch": "nest start --config ./nest.config.json --watch",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
-    "migration:generate": "pnpm run typeorm migration:generate -- -n",
-    "migration:create": "pnpm run typeorm migration:create -- -n",
-    "migration:run": "pnpm run typeorm migration:run",
-    "migration:revert": "pnpm run typeorm migration:revert"
+    "typeorm": "typeorm-ts-node-commonjs",
+    "schema:sync": "npx typeorm-ts-node-commonjs schema:sync",
+    "typeorm:cache": "npx typeorm-ts-node-commonjs cache:clear",
+    "schema:drop": "npx typeorm-ts-node-commonjs -d ./src/config/typeorm.config.ts",
+    "migration:create": "typeorm migration:create ./migrations/schema-update",
+    "migration:generate": "npx typeorm-ts-node-commonjs migration:generate ./migrations/schema-update -d ./src/config/typeorm.config.ts",
+    "migration:show": "npx typeorm-ts-node-commonjs migration:show -d ./src/config/typeorm.config.ts",
+    "migration:run": "npx typeorm-ts-node-commonjs migration:run -d  ./src/config/typeorm.config.ts",
+    "migration:revert": "npx typeorm-ts-node-commonjs migration:revert -d ./src/config/typeorm.config.ts"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.2",

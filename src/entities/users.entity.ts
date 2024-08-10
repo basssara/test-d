@@ -2,7 +2,12 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { ServiceEntity } from './services.entity';
 import { UserModel } from '@interfaces';
-import { RecordStatusesForDB } from 'enums/record-statuses.enum';
+
+export enum RecordStatusesForDB {
+  ACTIVE_NEW = 'active_new',
+  CANCELL = 'cancell',
+  EDIT = 'edit',
+}
 
 @Entity('users')
 export class UserEntity implements UserModel {
@@ -13,8 +18,9 @@ export class UserEntity implements UserModel {
   pinpp: string;
 
   @Column({
+    type: 'enum',
     enum: RecordStatusesForDB,
-    nullable: true,
+    default: RecordStatusesForDB.ACTIVE_NEW,
   })
   status: RecordStatusesForDB;
 
