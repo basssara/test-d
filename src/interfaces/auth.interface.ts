@@ -4,7 +4,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  sessionId: string;
+  id: string;
   accessToken: string;
   refreshToken: string;
 }

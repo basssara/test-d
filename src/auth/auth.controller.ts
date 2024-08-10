@@ -17,11 +17,10 @@ export class AuthController {
   async login(
     @Body() body: LoginDtoRequest,
     @Req() req: Request,
-  ): Promise<Omit<LoginResponse, 'sessionId'>> {
-    const { accessToken, refreshToken, sessionId } =
-      await this.service.login(body);
+  ): Promise<Omit<LoginResponse, 'id'>> {
+    const { accessToken, refreshToken, id } = await this.service.login(body);
 
-    req.session.user = { sessionId };
+    req.session.user = { id };
 
     return {
       accessToken: accessToken,
