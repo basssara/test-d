@@ -6,7 +6,7 @@ import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly service: AuthService) {}
+  constructor(private readonly service: AuthService) { }
 
   @Post('login')
   async login(
