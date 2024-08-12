@@ -3,7 +3,6 @@ import { ApplicationEntity, ServiceEntity } from 'entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ApiLengthRequiredResponse } from '@nestjs/swagger';
-import { dataSourceOptions } from 'config';
 import { SendApplicationRequest, UpdateApplicationRequest } from '@interfaces';
 import { updateApplicationDto } from './dto';
 
