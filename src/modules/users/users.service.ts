@@ -12,6 +12,7 @@ import {
   CreateUserRequest,
   GetUserRequest,
   GetUserResponse,
+  UpdateUserRequest,
 } from '@interfaces';
 import * as bcrypt from 'bcrypt';
 import { AsbtService } from 'clients';
@@ -24,7 +25,7 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
     private readonly asbtService: AsbtService,
-  ) {}
+  ) { }
 
   async create(data: CreateUserRequest): Promise<void> {
     const saltOrRounds = 10;
@@ -91,8 +92,24 @@ export class UsersService {
     });
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    const users = await this.usersRepository.find()
+    return users
+  }
+
+  async findOne(id: string) {
+    const user = await this.usersRepository.findOne(
+      {
+        where: {
+          id: id
+        }
+      }
+    )
+
+    if (!user || !user.id) {
+      throw new NotFoundException("User not found")
+    };
+    return user
   }
 
   async validate(data: GetUserRequest): Promise<GetUserResponse> {
@@ -112,13 +129,20 @@ export class UsersService {
     };
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
+  async update(id: string, updateUserDto: UpdateUserRequest): Promise<void> {
+    await this.usersRepository.update(id,
+      {
+        ...updateUserDto,
+        updatedAt: new Date(),
+      }
+    );
+  }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string) {
     await this.usersRepository.update(id, {
-      updatedAt: new Date(),
+      deletedAt: new Date(),
     });
+
+    return 'ok'
   }
 }

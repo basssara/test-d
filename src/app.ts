@@ -12,6 +12,7 @@ import { asbtConfig, TypeOrmConfigService } from 'config';
 import { ApplicationModule } from 'modules/application/application.module';
 import { AuthModule } from 'auth/auth.module';
 import { AsbtModule } from 'clients';
+import { DistrictModule } from 'modules/district/district.module';
 
 @Module({
   imports: [
@@ -31,8 +32,9 @@ import { AsbtModule } from 'clients';
     FacilitiesModule,
     AuthModule,
     AsbtModule,
+    DistrictModule
   ],
   controllers: [HealthController],
   providers: [],
 })
-export class App {}
+export class App { }
