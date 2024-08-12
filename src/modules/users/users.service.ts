@@ -12,6 +12,7 @@ import {
   CreateUserRequest,
   GetUserRequest,
   GetUserResponse,
+  UpdateUserRequest,
 } from '@interfaces';
 import * as bcrypt from 'bcrypt';
 import { AsbtService } from 'clients';
@@ -127,13 +128,20 @@ export class UsersService {
     };
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
+  async update(id: string, updateUserDto: UpdateUserRequest): Promise<void> {
+    await this.usersRepository.update(id,
+      {
+        ...updateUserDto,
+        updatedAt: new Date(),
+      }
+    );
+  }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string) {
     await this.usersRepository.update(id, {
-      updatedAt: new Date(),
+      deletedAt: new Date(),
     });
+
+    return 'ok'
   }
 }

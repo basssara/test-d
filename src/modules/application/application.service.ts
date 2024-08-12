@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ApplicationEntity, ServiceEntity } from 'entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-// import { SendApplicationRequest } from '@interfaces';
+import { ApiLengthRequiredResponse } from '@nestjs/swagger';
+import { dataSourceOptions } from 'config';
+import { SendApplicationRequest, UpdateApplicationRequest } from '@interfaces';
+import { updateApplicationDto } from './dto';
 
 @Injectable()
 export class ApplicationService {
@@ -11,25 +14,53 @@ export class ApplicationService {
     private readonly serviceRepository: Repository<ServiceEntity>,
     @InjectRepository(ApplicationEntity)
     private readonly applicationRepository: Repository<ApplicationEntity>,
-  ) {}
+  ) { }
 
   async create(data: any) {
-    return data;
+    const new_application = await this.applicationRepository.create(data)
+    return await this.applicationRepository.save(new_application)
   }
 
-  findAll() {
-    return `This action returns all application`;
+  async findAll() {
+    const applications = await this.applicationRepository.find();
+    return {
+      message: "succes",
+      data: applications
+    }
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} application`;
+  async findOne(id: string) {
+    const application = await this.applicationRepository.findOne(
+      {
+        where: {
+          id: id,
+        }
+      }
+    )
+    if (!application || !application.id) {
+      throw new NotFoundException("Application not found")
+    };
+
+    return {
+      message: "succes",
+      data: application
+    }
   }
 
-  // update(id: string, data: UpdateApplicationDto) {
-  //   return `This action updates a #${id} application`;
-  // }
+  async update(id: string, UpdateApplicationDto: UpdateApplicationRequest): Promise<void> {
+    await this.applicationRepository.update(id,
+      {
+        ...UpdateApplicationDto,
+        updatedAt: new Date(),
+      }
+    );
+  }
 
-  remove(id: string) {
-    return `This action removes a #${id} application`;
+  async remove(id: string): Promise<void> {
+    await this.applicationRepository.update(id,
+      {
+        deletedAt: new Date(),
+      }
+    )
   }
 }
