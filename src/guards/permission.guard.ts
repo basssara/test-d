@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { isJWT } from 'class-validator';
-import { PERMISSION } from 'constants/permission.constant';
+// import { PERMISSION } from 'constants/permission.constant';
 import { ErrorCodes } from '@enums';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'entities';
@@ -24,10 +24,10 @@ export class CheckPermissionGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const permissionName = this.reflector.get<string>(
-      PERMISSION,
-      context.getHandler(),
-    );
+    // const permissionName = this.reflector.get<string>(
+    //   PERMISSION,
+    //   context.getHandler(),
+    // );
 
     const request = context.switchToHttp().getRequest<Request>();
 
