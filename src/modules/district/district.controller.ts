@@ -25,7 +25,7 @@ export class DistrictController {
 
     @Post()
     craete(@Body() crateDistrictDto: CreateDistrictDTO) {
-        return this.districtService.crate(crateDistrictDto)
+        return this.districtService.create(crateDistrictDto)
     }
 
     @Put(':id')

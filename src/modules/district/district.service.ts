@@ -39,9 +39,7 @@ export class DistrictService {
     }
 
 
-    async crate(createDistrictDto: any) {
-        console.log(createDistrictDto);
-
+    async create(createDistrictDto: Omit<CreateDistrictRequest, 'facilityId' | 'regionId'>) {
         const new_district = this.DistrictRepository.create(createDistrictDto)
         return await this.DistrictRepository.save(new_district)
 
