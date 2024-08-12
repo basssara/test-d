@@ -18,7 +18,7 @@ export interface UserModel {
 export interface CreateUserRequest {
   login: string;
   password: string;
-  role: string[];
+  roles: string[];
 }
 
 export interface GetUserRequest {
@@ -29,7 +29,7 @@ export interface GetUserResponse {
   id: string;
   login: string;
   password: string;
-  role: AccessRoles[];
+  role: string[];
 }
 
 export interface UpdateUserRequest {

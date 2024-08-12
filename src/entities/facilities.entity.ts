@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from './users.entity';
-import { RegionEntity } from './regions.entity';
 import { FacilitiesModel } from '@interfaces';
+import { DistrictEntity } from './district.entity';
 
 @Entity('facilities')
 export class FacilityEntity
@@ -23,9 +23,9 @@ export class FacilityEntity
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
 
-  @OneToOne(() => RegionEntity)
-  @JoinColumn({ name: 'regionId' })
-  region: RegionEntity;
+  @OneToOne(() => DistrictEntity)
+  @JoinColumn({ name: 'districtId' })
+  district: DistrictEntity;
 
   @Column({
     type: 'timestamp',

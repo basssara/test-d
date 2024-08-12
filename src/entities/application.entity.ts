@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { UserEntity } from './users.entity';
 import { ApplicationModel } from '@interfaces';
+import { ServiceEntity } from './services.entity';
 
 export enum Statuses {
   ACCEPTED = 'accepted',
@@ -28,15 +28,15 @@ export class ApplicationEntity implements Pick<ApplicationModel, 'pinfl'> {
   @Column({ type: 'decimal' })
   amount: number;
 
+  @ManyToOne(() => ServiceEntity, (service) => service.applications)
+  service: ServiceEntity;
+
   @Column({
     type: 'enum',
     enum: Statuses,
     default: Statuses.PENDING,
   })
   applicationStatus: Statuses;
-
-  @ManyToOne(() => UserEntity, (user) => user.applications)
-  user: UserEntity;
 
   @Column({
     type: 'timestamp',

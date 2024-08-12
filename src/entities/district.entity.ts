@@ -1,54 +1,49 @@
-import { DistrictsModel } from "@interfaces";
-import { RegionEntity } from "./regions.entity";
-import { FacilityEntity } from "./facilities.entity";
+import { DistrictsModel } from '@interfaces';
+import { RegionEntity } from './regions.entity';
+import { FacilityEntity } from './facilities.entity';
 import {
-    Column,
-    Entity,
-    JoinColumn,
-    OneToOne,
-    ManyToOne,
-    PrimaryGeneratedColumn
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity('districts')
-export class DistrictsEntity implements Omit<DistrictsModel, 'facilityId' | 'regionId'> {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+export class DistrictEntity
+  implements Omit<DistrictsModel, 'facilityId' | 'regionId'>
+{
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    districtName: string;
+  @Column()
+  districtName: string;
 
-    @OneToOne(() => FacilityEntity)
-    @JoinColumn(
-        {
-            name: 'facilityId'
-        }
-    )
-    facilityId: FacilityEntity;
+  @OneToOne(() => FacilityEntity)
+  @JoinColumn({
+    name: 'facilityId',
+  })
+  facility: FacilityEntity;
 
-    @ManyToOne(() => RegionEntity)
-    @JoinColumn(
-        {
-            name: 'regionId'
-        }
-    )
-    regionId: RegionEntity;
+  @ManyToOne(() => RegionEntity, (region) => region.districts)
+  region: RegionEntity;
 
-    @Column({
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP',
-    })
-    createdAt: Date;
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
-    @Column({
-        type: 'timestamp',
-        nullable: true,
-    })
-    updatedAt: Date;
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  updatedAt: Date;
 
-    @Column({
-        type: 'timestamp',
-        nullable: true,
-    })
-    deletedAt: Date;
-}  
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  deletedAt: Date;
+}

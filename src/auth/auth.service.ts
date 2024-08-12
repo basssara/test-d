@@ -2,7 +2,7 @@ import type { LoginRequest, LoginResponse } from '@interfaces';
 import { UsersService } from '@modules';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { jwtConstants } from 'constanst';
+import { jwtConstants } from 'constants/jwt.constant';
 import { signJwt } from 'helpers';
 
 @Injectable()
@@ -22,6 +22,7 @@ export class AuthService {
       {
         id: user.id,
         login: user.login,
+        roles: user.role,
       },
       jwtConstants.secret,
       60 * 60,
@@ -31,6 +32,7 @@ export class AuthService {
       {
         id: user.id,
         login: user.login,
+        roles: user.role,
       },
       jwtConstants.secret,
       60 * 60 * 30,

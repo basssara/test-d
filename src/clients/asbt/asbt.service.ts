@@ -1,12 +1,7 @@
 import { AsbtCreateRequest, AsbtCreateResponse } from '@interfaces';
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { asbtRepsone, formatDate, roleConvert, statusConvert } from 'helpers';
 
 @Injectable()
@@ -50,38 +45,27 @@ export class AsbtService {
 
     console.log(process.env.ASBT_SERVICE_URL + '/UserManagement/AddUser');
 
-    await this.#_axios
-      .request<AsbtCreateRequest, AxiosResponse<AsbtCreateResponse>>({
-        url: '/UserManagement/AddUser',
-        method: 'POST',
-        data: {
-          guid: payload.guid,
-          status: statusConvert(payload.status),
-          pinpp: payload.pinpp,
-          doctype: payload.doctype,
-          serialnumber: payload.serialnumber,
-          accessRoles: payload.accessRoles.map((role) => roleConvert(role)),
-          login: payload.login,
-          password: payload.password,
-          dateFrom: formatDate(payload.dateFrom, 'dd-MM-yyyy'),
-          dateTill: formatDate(payload.dateTill, 'dd-MM-yyyy'),
-        },
-      })
-      .then((res: AxiosResponse<AsbtCreateResponse>) => {
-        result.AnswereId = res.data.AnswereId;
-        result.AnswereMessage = res.data.AnswereMessage;
-        result.AnswereComment = res.data.AnswereComment;
-      })
-      .catch((err: AxiosError) => {
-        switch (err.response.status) {
-          case 401:
-            throw new UnauthorizedException(err.response.statusText);
-          case 400:
-            throw new BadRequestException(err.response.statusText);
-          default:
-            throw new InternalServerErrorException(err.response.statusText);
-        }
-      });
+    const response = await this.#_axios.request<
+      AsbtCreateRequest,
+      AxiosResponse<AsbtCreateResponse>
+    >({
+      url: '/UserManagement/AddUser',
+      method: 'POST',
+      data: {
+        guid: payload.guid,
+        status: statusConvert(payload.status),
+        pinpp: payload.pinpp,
+        doctype: payload.doctype,
+        serialnumber: payload.serialnumber,
+        accessRoles: payload.accessRoles.map((role) => roleConvert(role)),
+        login: payload.login,
+        password: payload.password,
+        dateFrom: formatDate(payload.dateFrom, 'dd-MM-yyyy'),
+        dateTill: formatDate(payload.dateTill, 'dd-MM-yyyy'),
+      },
+    });
+
+    console.log(response);
     return asbtRepsone(result);
   }
 }

@@ -4,8 +4,8 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { json } from 'express';
 import { appConfig, swaggerConfig } from 'config';
 import session = require('express-session');
-import { sessionConstants } from 'constanst/session.constant';
-import { VersioningType } from '@nestjs/common';
+import { sessionConstants } from 'constants/session.constant';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
@@ -39,10 +39,11 @@ async function bootstrap() {
     }),
   );
 
-  app.enableVersioning({
-    type: VersioningType.URI,
-    prefix: 'api/v',
-  });
+  app.useGlobalPipes(new ValidationPipe()),
+    app.enableVersioning({
+      type: VersioningType.URI,
+      prefix: 'api/v',
+    });
 
   app.set('env', appConfig.env);
   app.set('etag', 'strong');

@@ -43,7 +43,7 @@ export class UsersService {
     const user = this.usersRepository.create({
       login: data.login,
       password: hashedPassword,
-      accessRoles: data.role.length === 0 ? AccessRoles.OPERATOR : data.role,
+      accessRoles: data.roles.length === 0 ? AccessRoles.OPERATOR : data.roles,
     } as DeepPartial<UserEntity>);
 
     this.usersRepository.save(user);
@@ -112,7 +112,7 @@ export class UsersService {
     return user
   }
 
-  async validate(data: GetUserRequest): Promise<Omit<GetUserResponse, 'role'>> {
+  async validate(data: GetUserRequest): Promise<GetUserResponse> {
     const user = await this.usersRepository.findOne({
       where: { login: data.login },
     });
@@ -123,6 +123,7 @@ export class UsersService {
 
     return {
       id: user.id,
+      role: user.accessRoles,
       login: user.login,
       password: user.password,
     };
