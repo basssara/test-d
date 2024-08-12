@@ -37,7 +37,7 @@ export class RegionsService {
 
   async create(dto: CreateRegionRequest): Promise<RegionEntity> {
     const new_region = this.regionRepository.create(dto)
-    throw await this.regionRepository.save(new_region);
+    return await this.regionRepository.save(new_region);
   }
 
   async update(id: string, dto: Omit<UpdateRegionRequest, 'id'>): Promise<void> {

@@ -43,8 +43,6 @@ export class FacilitiesService {
   };
 
   async create(createFacilityDto: CreateFacilityRequest) {
-    console.log(createFacilityDto);
-
     const new_facility = this.FacilityRepository.create(createFacilityDto)
     return await this.FacilityRepository.save(new_facility)
   }

@@ -24,7 +24,7 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
     private readonly asbtService: AsbtService,
-  ) {}
+  ) { }
 
   async create(data: CreateUserRequest): Promise<void> {
     const saltOrRounds = 10;
@@ -91,8 +91,24 @@ export class UsersService {
     });
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    const users = await this.usersRepository.find()
+    return users
+  }
+
+  async findOne(id: string) {
+    const user = await this.usersRepository.findOne(
+      {
+        where: {
+          id: id
+        }
+      }
+    )
+
+    if (!user || !user.id) {
+      throw new NotFoundException("User not found")
+    };
+    return user
   }
 
   async validate(data: GetUserRequest): Promise<Omit<GetUserResponse, 'role'>> {
