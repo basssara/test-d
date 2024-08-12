@@ -1,21 +1,14 @@
 import { Controller, Get, Post, Param, Delete, Body, Put } from '@nestjs/common';
 import { FacilitiesService } from './facilities.service';
-
 import { CreateFacilityDTO, UpdateFacilityDTO } from './dto/index';
 
 
-import { ApiTags } from '@nestjs/swagger';
 @Controller({
   path: 'facilities',
   version: '1'
 })
 
-
-@ApiTags('Facilities Service')
-@Controller({
-  path: 'facilities',
-  version: '1',
-})
+@Controller('facilities')
 export class FacilitiesController {
   constructor(private readonly facilitiesService: FacilitiesService) { }
 
