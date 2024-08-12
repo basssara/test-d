@@ -2,11 +2,11 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { FacilityEntity } from './facilities.entity';
 import { RegionModel } from '@interfaces';
+import { DistrictEntity } from './district.entity';
 
 @Entity('regions')
 export class RegionEntity implements Omit<RegionModel, 'userId'> {
@@ -16,9 +16,9 @@ export class RegionEntity implements Omit<RegionModel, 'userId'> {
   @Column()
   regionName: string;
 
-  @OneToOne(() => FacilityEntity)
+  @OneToMany(() => DistrictEntity, (district) => district.region)
   @JoinColumn({ name: 'facilityId' })
-  facilityId: FacilityEntity;
+  districts: DistrictEntity[];
 
   @Column({
     type: 'timestamp',

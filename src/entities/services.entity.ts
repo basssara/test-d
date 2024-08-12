@@ -1,6 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { UserEntity } from './users.entity';
 import { ServiceModel } from '@interfaces';
+import { Application } from 'express';
+import { ApplicationEntity } from './application.entity';
 
 @Entity('services')
 export class ServiceEntity implements Omit<ServiceModel, 'userId'> {
@@ -10,8 +18,11 @@ export class ServiceEntity implements Omit<ServiceModel, 'userId'> {
   @Column()
   serviceName: string;
 
-  @OneToMany(() => UserEntity, (user) => user.applications)
+  @ManyToOne(() => UserEntity, (user) => user.services)
   user: UserEntity;
+
+  @OneToMany(() => ApplicationEntity, (app) => app.service)
+  applications: Application[];
 
   @Column({
     type: 'timestamp',

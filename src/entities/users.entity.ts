@@ -1,7 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { ApplicationEntity } from './application.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { ServiceEntity } from './services.entity';
 import { UserModel } from '@interfaces';
+import { FacilityEntity } from './facilities.entity';
 
 export enum RecordStatusesForDB {
   ACTIVE_NEW = 'active_new',
@@ -39,11 +46,12 @@ export class UserEntity implements UserModel {
   })
   accessRoles: string[];
 
-  @OneToMany(() => ApplicationEntity, (application) => application.user)
-  applications: ApplicationEntity[];
-
   @OneToMany(() => ServiceEntity, (service) => service.user)
   services: ServiceEntity[];
+
+  @OneToOne(() => FacilityEntity)
+  @JoinColumn({ name: 'facilityId' })
+  facilityId: FacilityEntity;
 
   @Column({
     type: 'timestamp',

@@ -24,3 +24,4 @@ export type {
 } from './application.interface';
 export type { JwtModel } from './jwt.interface';
 export type { AsbtCreateRequest, AsbtCreateResponse } from './asbt.interface';
+export type { DistrictsModel } from './districts.interface';
