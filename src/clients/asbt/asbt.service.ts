@@ -1,12 +1,7 @@
 import { AsbtCreateRequest, AsbtCreateResponse } from '@interfaces';
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { asbtRepsone, formatDate, roleConvert, statusConvert } from 'helpers';
 
 @Injectable()

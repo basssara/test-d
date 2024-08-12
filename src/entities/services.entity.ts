@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { UserEntity } from './users.entity';
 import { ServiceModel } from '@interfaces';
-import { Application } from 'express';
 import { ApplicationEntity } from './application.entity';
 
 @Entity('services')
@@ -22,7 +21,7 @@ export class ServiceEntity implements Omit<ServiceModel, 'userId'> {
   user: UserEntity;
 
   @OneToMany(() => ApplicationEntity, (app) => app.service)
-  applications: Application[];
+  applications: ApplicationEntity[];
 
   @Column({
     type: 'timestamp',

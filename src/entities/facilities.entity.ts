@@ -6,7 +6,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from './users.entity';
-import { RegionEntity } from './regions.entity';
 import { FacilitiesModel } from '@interfaces';
 import { DistrictEntity } from './district.entity';
 
