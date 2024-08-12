@@ -2,6 +2,7 @@ import type { AsbtCreateRequest, CreateUserRequest } from '@interfaces';
 import {
   IsArray,
   IsDate,
+  IsDateString,
   IsEnum,
   IsNotEmpty,
   IsOptional,
@@ -13,8 +14,16 @@ export class CreateUserRequestDto implements CreateUserRequest {
   @IsString()
   @IsNotEmpty()
   login: string;
+
+  @IsArray()
+  @IsNotEmpty()
+  @IsString({ each: true })
+  @IsEnum(RecordStatusesForDB)
+  roles: string[];
+
+  @IsString()
+  @IsNotEmpty()
   password: string;
-  role: string[];
 }
 
 export class CreateAsbtRequestDto
@@ -49,6 +58,6 @@ export class CreateAsbtRequestDto
   password?: string;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   dateTill: Date;
 }

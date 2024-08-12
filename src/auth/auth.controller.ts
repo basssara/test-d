@@ -56,7 +56,7 @@ export class AuthController {
   async login(
     @Body() body: LoginDtoRequest,
     @Req() req: Request,
-  ): Promise<Omit<LoginResponse, 'id'>> {
+  ): Promise<Omit<LoginResponse, 'id' | 'roles'>> {
     const { accessToken, refreshToken, id } = await this.service.login(body);
 
     req.session.user = { id };
