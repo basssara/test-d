@@ -1,9 +1,15 @@
-import { Controller, Get, Post, Param, Delete, Body, Patch, Put } from '@nestjs/common';
+import { Controller, Get, Post, Param, Delete, Body, Patch, Put, HttpCode, HttpStatus } from '@nestjs/common';
 import { RegionsService } from './regions.service';
-
 import { createRegionDto } from './dto/create.region.dto';
-
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
+import {
+  ForbiddenResponse,
+  InternalServerErrorResponse,
+  CreateRegionRequestSwagger,
+  CreateRegionResponseSwagger,
+  UnauthorizedResponse,
+  UnprocessableEntityResponse
+} from "swagger"
 
 @Controller({
   path: 'regions',
@@ -29,6 +35,32 @@ export class RegionsController {
   }
 
   @Post()
+
+  @HttpCode(HttpStatus.OK)
+  @ApiBody({
+    type: CreateRegionRequestSwagger,
+  })
+  @ApiResponse({
+    type: CreateRegionResponseSwagger,
+    status: HttpStatus.OK,
+  })
+  @ApiResponse({
+    type: UnauthorizedResponse,
+    status: HttpStatus.UNAUTHORIZED,
+  })
+  @ApiResponse({
+    type: ForbiddenResponse,
+    status: HttpStatus.FORBIDDEN,
+  })
+  @ApiResponse({
+    type: UnprocessableEntityResponse,
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+  })
+  @ApiResponse({
+    type: InternalServerErrorResponse,
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+  })
+
   create(@Body() dto: createRegionDto) {
     return this.regionsService.create(dto);
   }

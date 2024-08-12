@@ -7,7 +7,7 @@ export type {
   UpdateUserRequest,
   DeleteUserRequest,
 } from './user.interface';
-export type { RegionModel, FindRegionRequest, CreateRegionRequest, UpdateRegionRequest } from './region.interface';
+export type { RegionModel, FindRegionRequest, CreateRegionRequest, UpdateRegionRequest, DeleteRegionRequest } from './region.interface';
 export type {
   ServiceModel,
   CreateServiceRequest,
@@ -25,3 +25,6 @@ export type {
 } from './application.interface';
 export type { JwtModel } from './jwt.interface';
 export type { AsbtCreateRequest, AsbtCreateResponse } from './asbt.interface';
+export type {
+  DistrictsModel
+} from './district.interface'

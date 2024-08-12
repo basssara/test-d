@@ -16,3 +16,7 @@ export interface UpdateRegionRequest {
 export interface FindRegionRequest {
   id: string;
 }
+
+export interface DeleteRegionRequest {
+  id: string;
+}
