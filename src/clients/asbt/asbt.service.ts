@@ -1,31 +1,23 @@
 import { AsbtCreateRequest, AsbtCreateResponse } from '@interfaces';
 import {
   BadRequestException,
-  ConflictException,
-  HttpException,
-  HttpStatus,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import axios, { AxiosError, AxiosInstance } from 'axios';
-import { roleConvert, StatusConvert } from 'helpers';
-
-export interface MessageResponse {
-  AnswereId: number;
-  AnswereMessage: string;
-  AnswereComment: string;
-}
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import { asbtRepsone, formatDate, roleConvert, statusConvert } from 'helpers';
 
 @Injectable()
 export class AsbtService {
   readonly #_axios: AxiosInstance;
-  readonly token = process.env.API_TOKEN;
+  readonly token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiIiwiVXNlcklkIjoiMTAwMTAzOCIsIlN1YnN5c3RlbSI6IjEiLCJMT0NBTCBBVVRIT1JJVFkiOiJBc2J0QXV0aDIuMFNlcnZlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IjQwMDAxMDAiLCJuYmYiOjE3MjMxMjA0NzgsImV4cCI6MTcyMzIwNjg3OCwiaXNzIjoiQXNidEF1dGgyLjBTZXJ2ZXIiLCJhdWQiOiJodHRwOi8vYXNidC51ei8ifQ.PqWxALRy-2zvvFCFss6HFyssF5selSJJMZkrRhRBXA0';
 
   constructor(config: ConfigService) {
     this.#_axios = axios.create({
-      baseURL: 'http://195.158.30.220:20450',
+      baseURL: config.getOrThrow<string>('asbt.url'),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -37,63 +29,59 @@ export class AsbtService {
   }
 
   async create(payload: AsbtCreateRequest): Promise<AsbtCreateResponse> {
-    const result = {
+    const result: AsbtCreateResponse = {
       AnswereId: 0,
       AnswereMessage: '',
       AnswereComment: '',
     };
 
+    console.log({
+      guid: payload.guid,
+      status: statusConvert(payload.status),
+      pinpp: payload.pinpp,
+      doctype: payload.doctype,
+      serialnumber: payload.serialnumber,
+      accessRoles: payload.accessRoles.map((role) => roleConvert(role)),
+      login: payload.login,
+      password: payload.password,
+      dateFrom: formatDate(payload.dateFrom, 'dd-MM-yyyy'),
+      dateTill: formatDate(payload.dateTill, 'dd-MM-yyyy'),
+    });
+
+    console.log(process.env.ASBT_SERVICE_URL + '/UserManagement/AddUser');
+
     await this.#_axios
-      .request<AsbtCreateRequest, AsbtCreateResponse>({
+      .request<AsbtCreateRequest, AxiosResponse<AsbtCreateResponse>>({
         url: '/UserManagement/AddUser',
         method: 'POST',
         data: {
-          id: payload.id,
-          status: StatusConvert(payload.status),
+          guid: payload.guid,
+          status: statusConvert(payload.status),
           pinpp: payload.pinpp,
           doctype: payload.doctype,
-          serialNumber: payload.serialNumber,
-          accesRoles: payload.accesRoles.map((role) => roleConvert(role)),
+          serialnumber: payload.serialnumber,
+          accessRoles: payload.accessRoles.map((role) => roleConvert(role)),
           login: payload.login,
           password: payload.password,
-          dateFrom: payload.dateFrom,
-          dateTill: payload.dateTill,
+          dateFrom: formatDate(payload.dateFrom, 'dd-MM-yyyy'),
+          dateTill: formatDate(payload.dateTill, 'dd-MM-yyyy'),
         },
       })
-      .then((res: AsbtCreateResponse) => {
-        result.AnswereComment = res.AnswereComment;
-        result.AnswereId = res.AnswereId;
-        result.AnswereMessage = res.AnswereMessage;
+      .then((res: AxiosResponse<AsbtCreateResponse>) => {
+        result.AnswereId = res.data.AnswereId;
+        result.AnswereMessage = res.data.AnswereMessage;
+        result.AnswereComment = res.data.AnswereComment;
       })
       .catch((err: AxiosError) => {
-        throw new HttpException(err.message, err.status);
+        switch (err.response.status) {
+          case 401:
+            throw new UnauthorizedException(err.response.statusText);
+          case 400:
+            throw new BadRequestException(err.response.statusText);
+          default:
+            throw new InternalServerErrorException(err.response.statusText);
+        }
       });
-
-    switch (result.AnswereId) {
-      case 1:
-        return;
-      case 0:
-        throw new InternalServerErrorException(
-          HttpStatus.INTERNAL_SERVER_ERROR,
-          result.AnswereMessage,
-        );
-      case 2:
-        throw new BadRequestException(
-          HttpStatus.BAD_REQUEST,
-          result.AnswereMessage,
-        );
-      case 5:
-        throw new NotFoundException(
-          HttpStatus.NOT_FOUND,
-          result.AnswereMessage,
-        );
-      case 7:
-        throw new ConflictException(HttpStatus.CONFLICT, result.AnswereMessage);
-      default:
-        throw new InternalServerErrorException(
-          HttpStatus.INTERNAL_SERVER_ERROR,
-          result.AnswereMessage,
-        );
-    }
+    return asbtRepsone(result);
   }
 }

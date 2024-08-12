@@ -2,8 +2,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -18,15 +16,9 @@ export class RegionEntity implements Omit<RegionModel, 'userId'> {
   @Column()
   regionName: string;
 
-  @ManyToOne(() => RegionEntity, (region) => region.children)
-  parentCategory: RegionEntity;
-
-  @OneToMany(() => RegionEntity, (region) => region.parentCategory)
-  children: RegionEntity[];
-
   @OneToOne(() => FacilityEntity)
   @JoinColumn({ name: 'facilityId' })
-  user: FacilityEntity;
+  facilityId: FacilityEntity;
 
   @Column({
     type: 'timestamp',

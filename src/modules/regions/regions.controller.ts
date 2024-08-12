@@ -1,11 +1,19 @@
 import { Controller, Get, Post, Param, Delete, Body, Patch, Put } from '@nestjs/common';
 import { RegionsService } from './regions.service';
+
 import { createRegionDto } from './dto/create.region.dto';
 
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller({
   path: 'regions',
   version: '1'
+})
+
+@ApiTags('Regions Service')
+@Controller({
+  path: 'regions',
+  version: '1',
 })
 export class RegionsController {
   constructor(private readonly regionsService: RegionsService) { }

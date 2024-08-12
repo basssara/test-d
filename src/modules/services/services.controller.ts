@@ -8,7 +8,9 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ServicesService } from './services.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Service Service')
 @Controller({
   path: 'services',
   version: '1',

@@ -7,8 +7,8 @@ import {
   ServicesModule,
 } from '@modules';
 import { HealthController } from 'health.controller';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { asbtConfig, TypeOrmConfig } from 'config';
+import { ConfigModule } from '@nestjs/config';
+import { asbtConfig, TypeOrmConfigService } from 'config';
 import { ApplicationModule } from 'modules/application/application.module';
 import { AuthModule } from 'auth/auth.module';
 import { AsbtModule } from 'clients';
@@ -18,14 +18,11 @@ import { AsbtModule } from 'clients';
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [TypeOrmConfig, asbtConfig],
+      load: [asbtConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        ...configService.get('database'),
-      }),
-      inject: [ConfigService],
+      useClass: TypeOrmConfigService,
     }),
     UsersModule,
     RegionsModule,

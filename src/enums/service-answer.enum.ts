@@ -1,4 +1,4 @@
-export enum ServiceAnswers {
+export enum AsbtAnswers {
   OK = 1,
   SERVICE_ERROR = 0,
   INFRORMATION_ERROR = 2,

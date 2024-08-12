@@ -9,10 +9,13 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserRequestDto } from './dto/create-user.dto';
-import { AsbtCreateRequest } from '@interfaces';
+import {
+  CreateAsbtRequestDto,
+  CreateUserRequestDto,
+} from './dto/create-user.dto';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
+  AsbtCreateRequestSwagger,
   ForbiddenResponse,
   InternalServerErrorResponse,
   UnauthorizedResponse,
@@ -35,7 +38,7 @@ export class UsersController {
   @Post('asbt')
   @HttpCode(HttpStatus.OK)
   @ApiBody({
-    type: '',
+    type: AsbtCreateRequestSwagger,
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -56,8 +59,8 @@ export class UsersController {
     type: InternalServerErrorResponse,
     status: HttpStatus.INTERNAL_SERVER_ERROR,
   })
-  createNewUserForAsbt(@Body() createAsbt: AsbtCreateRequest) {
-    return this.usersService.createNewUserForAsbt(createAsbt);
+  createNewUserForAsbt(@Body() body: CreateAsbtRequestDto) {
+    return this.usersService.createNewUserForAsbt(body);
   }
 
   @Get()

@@ -1,7 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { UserEntity } from './users.entity';
 import { ApplicationModel } from '@interfaces';
-import { Statuses } from 'enums/status.enum';
+
+export enum Statuses {
+  ACCEPTED = 'accepted',
+  PAYMENT_ACCEPTED = 'payment',
+  PROCEEDING = 'proceeding',
+  PERSONALTIZATION_SENT = 'personalization_sent',
+  PENDING = 'pending',
+  CANCELLED = 'cancelled',
+  COMPLETED = 'completed',
+}
 
 @Entity('applications')
 export class ApplicationEntity implements Pick<ApplicationModel, 'pinfl'> {
@@ -24,7 +33,7 @@ export class ApplicationEntity implements Pick<ApplicationModel, 'pinfl'> {
     enum: Statuses,
     default: Statuses.PENDING,
   })
-  applicationStatus: string;
+  applicationStatus: Statuses;
 
   @ManyToOne(() => UserEntity, (user) => user.applications)
   user: UserEntity;
