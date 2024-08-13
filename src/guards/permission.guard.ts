@@ -1,19 +1,15 @@
 import type { Request } from 'express';
 import type { CanActivate, ExecutionContext } from '@nestjs/common';
-import {
-  ForbiddenException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { isJWT } from 'class-validator';
-// import { PERMISSION } from 'constants/permission.constant';
-import { ErrorCodes } from '@enums';
+import { Roles, ErrorCodes } from '@enums';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'entities';
 import { Repository } from 'typeorm';
 import { verifyJwt } from 'helpers';
-import { jwtConstants } from 'constants/jwt.constant';
+import { ROLES_KEY } from 'decorators';
+import { jwtConstants } from 'constans';
 
 @Injectable()
 export class CheckPermissionGuard implements CanActivate {
@@ -24,10 +20,13 @@ export class CheckPermissionGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // const permissionName = this.reflector.get<string>(
-    //   PERMISSION,
-    //   context.getHandler(),
-    // );
+    const requiredRoles = this.reflector.getAllAndOverride<Roles[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (!requiredRoles) {
+      return true;
+    }
 
     const request = context.switchToHttp().getRequest<Request>();
 
@@ -37,7 +36,7 @@ export class CheckPermissionGuard implements CanActivate {
     );
 
     if (!accessToken || !isJWT(accessToken)) {
-      throw new UnauthorizedException(ErrorCodes.UNAUTHORIZED);
+      throw new UnauthorizedException(ErrorCodes.ACCESS_TOKEN_NOT_VALID);
     }
 
     const verified = verifyJwt(accessToken, jwtConstants.secret);
@@ -50,8 +49,8 @@ export class CheckPermissionGuard implements CanActivate {
       throw new UnauthorizedException(ErrorCodes.UNAUTHORIZED);
     }
 
-    if (!user.accessRoles.find((role: any) => role.name === 'admin')) {
-      throw new ForbiddenException(ErrorCodes.PERMISSION_DENIED);
+    if (!requiredRoles.some((role) => user.accessRoles?.includes(role))) {
+      throw new UnauthorizedException(ErrorCodes.PERMISSION_DENIED);
     }
 
     return true;

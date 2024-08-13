@@ -1,16 +1,16 @@
-import { AccessRoles, AccessRolesInDB } from 'enums/roles.enum';
+import { AccessRoles, Roles } from 'enums/roles.enum';
 
 export const roleConvert = (role: string) => {
   switch (role) {
-    case AccessRolesInDB.ADMIN:
+    case Roles.ADMIN:
       return AccessRoles.ADMIN;
-    case AccessRolesInDB.OPERATOR:
+    case Roles.OPERATOR:
       return AccessRoles.OPERATOR;
-    case AccessRolesInDB.DOCUMENT:
+    case Roles.DOCUMENT:
       return AccessRoles.DOCUMENT;
-    case AccessRolesInDB.ID_CARD:
+    case Roles.ID_CARD:
       return AccessRoles.ID_CARD;
-    case AccessRolesInDB.TEMPORARY_PERMAMENT_REGISTRATION:
+    case Roles.TEMPORARY_PERMAMENT_REGISTRATION:
       return AccessRoles.TEMPORARY_PERMAMENT_REGISTRATION;
   }
 };

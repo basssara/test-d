@@ -2,7 +2,7 @@ import type { LoginRequest, LoginResponse } from '@interfaces';
 import { UsersService } from '@modules';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { jwtConstants } from 'constants/jwt.constant';
+import { jwtConstants } from 'constans';
 import { signJwt } from 'helpers';
 
 @Injectable()

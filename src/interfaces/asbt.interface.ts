@@ -3,7 +3,7 @@ import { RecordStatusesForDB } from 'enums/record-statuses.enum';
 export interface AsbtCreateRequest {
   guid?: string;
   status?: RecordStatusesForDB;
-  pinpp?: string; //pinfl
+  pinpp?: string;
   doctype?: number;
   serialnumber: string;
   accessRoles?: string[];

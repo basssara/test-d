@@ -64,7 +64,6 @@ export class AsbtService {
         dateTill: formatDate(payload.dateTill, 'dd-MM-yyyy'),
       },
     });
-
     console.log(response);
     return asbtRepsone(result);
   }

@@ -11,7 +11,7 @@ import {
 import { UsersService } from './users.service';
 import {
   CreateAsbtRequestDto,
-  CreateUserRequestDto,
+  // CreateUserRequestDto,
 } from './dto/create-user.dto';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
@@ -30,10 +30,10 @@ import {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserRequestDto) {
-    return this.usersService.create(createUserDto);
-  }
+  // @Post()
+  // create(@Body() createUserDto: CreateUserRequestDto) {
+  //   return this.usersService.create(createUserDto);
+  // }
 
   @Post('asbt')
   @HttpCode(HttpStatus.OK)

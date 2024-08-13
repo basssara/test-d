@@ -4,9 +4,9 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { json } from 'express';
 import { appConfig, swaggerConfig } from 'config';
 import session = require('express-session');
-import { sessionConstants } from 'constants/session.constant';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
+import { sessionConstants } from 'constans/session.constant';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(App, {

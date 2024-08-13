@@ -17,7 +17,7 @@ export enum RecordStatusesForDB {
 }
 
 @Entity('users')
-export class UserEntity implements UserModel {
+export class UserEntity implements Omit<UserModel, 'dateFrom'> {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

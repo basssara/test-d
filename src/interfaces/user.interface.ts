@@ -1,24 +1,29 @@
-import { AccessRoles } from 'enums/roles.enum';
+import { RecordStatusesForDB } from 'entities';
 
 export interface UserModel {
-  id: string; //guid or uuid
-  login: string;
-  password: string;
-  // uniqueId: string;
-  // status?: string; //Record status
-  // pinpp: string; //pinfl
-  // doctype?: any; //
-  // serialNumber: string;
-  accesRoles?: AccessRoles[]; //in db
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
+  guid?: string;
+  status?: RecordStatusesForDB;
+  pinpp?: string;
+  doctype?: number;
+  serialNumber: string;
+  roles?: string[];
+  login?: string;
+  password?: string;
+  dateFrom: Date;
+  dateTill: Date;
 }
 
 export interface CreateUserRequest {
-  login: string;
-  password: string;
-  roles: string[];
+  guid?: string;
+  status?: RecordStatusesForDB;
+  pinpp?: string;
+  doctype?: number;
+  serialNumber: string;
+  roles?: string[];
+  login?: string;
+  password?: string;
+  dateFrom: Date;
+  dateTill: Date;
 }
 
 export interface GetUserRequest {

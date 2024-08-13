@@ -1,29 +1,28 @@
-import type { AsbtCreateRequest, CreateUserRequest } from '@interfaces';
+import type { AsbtCreateRequest } from '@interfaces';
 import {
   IsArray,
   IsDateString,
   IsEnum,
-  IsNotEmpty,
   IsOptional,
   IsString,
 } from 'class-validator';
 import { RecordStatusesForDB } from 'enums/record-statuses.enum';
 
-export class CreateUserRequestDto implements CreateUserRequest {
-  @IsString()
-  @IsNotEmpty()
-  login: string;
+// export class CreateUserRequestDto implements CreateUserRequest {
+//   @IsString()
+//   @IsNotEmpty()
+//   login: string;
 
-  @IsArray()
-  @IsNotEmpty()
-  @IsString({ each: true })
-  @IsEnum(RecordStatusesForDB)
-  roles: string[];
+//   @IsArray()
+//   @IsNotEmpty()
+//   @IsString({ each: true })
+//   @IsEnum(RecordStatusesForDB)
+//   roles: string[];
 
-  @IsString()
-  @IsNotEmpty()
-  password: string;
-}
+//   @IsString()
+//   @IsNotEmpty()
+//   password: string;
+// }
 
 export class CreateAsbtRequestDto
   implements Omit<AsbtCreateRequest, 'dateFrom'>

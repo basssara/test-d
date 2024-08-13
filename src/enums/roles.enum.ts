@@ -6,7 +6,7 @@ export enum AccessRoles {
   TEMPORARY_PERMAMENT_REGISTRATION = 5,
 }
 
-export enum AccessRolesInDB {
+export enum Roles {
   ADMIN = 'admin',
   OPERATOR = 'operator',
   DOCUMENT = 'document',
