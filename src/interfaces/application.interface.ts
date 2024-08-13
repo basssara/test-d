@@ -12,6 +12,12 @@ export interface SendApplicationRequest {
   pinfl: string;
 }
 
+export interface UpdateApplicationRequest {
+  serviceId: string;
+  fullName: string;
+  pinfl: string;
+}
+
 export interface SendApplicationResponse {
   fullName: string;
   pinfl: string;

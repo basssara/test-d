@@ -5,6 +5,7 @@ import {
   Body,
   Param,
   Delete,
+  Patch,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -12,7 +13,8 @@ import { UsersService } from './users.service';
 import {
   CreateAsbtRequestDto,
   // CreateUserRequestDto,
-} from './dto/create-user.dto';
+  UpdateUserDto,
+} from './dto/index';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   AsbtCreateRequestSwagger,
@@ -68,15 +70,20 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id);
+  }
+
   @Get('validate')
   validate(@Param('login') login: string) {
     return this.usersService.validate({ login });
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(+id, updateUserDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
