@@ -3,4 +3,4 @@ export * from './users.entity';
 export * from './application.entity';
 export * from './regions.entity';
 export * from './services.entity';
-export * from './district.entity'
+export * from './district.entity';

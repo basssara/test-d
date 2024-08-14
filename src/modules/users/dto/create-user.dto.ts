@@ -3,59 +3,50 @@ import {
   IsArray,
   IsDateString,
   IsEnum,
+  IsNotEmpty,
   IsOptional,
   IsString,
 } from 'class-validator';
 import { RecordStatusesForDB } from 'enums/record-statuses.enum';
 
-// export class CreateUserRequestDto implements CreateUserRequest {
-//   @IsString()
-//   @IsNotEmpty()
-//   login: string;
-
-//   @IsArray()
-//   @IsNotEmpty()
-//   @IsString({ each: true })
-//   @IsEnum(RecordStatusesForDB)
-//   roles: string[];
-
-//   @IsString()
-//   @IsNotEmpty()
-//   password: string;
-// }
-
-export class CreateAsbtRequestDto
-  implements Omit<AsbtCreateRequest, 'dateFrom'>
-{
-  @IsOptional()
+export class CreateAsbtRequestDto implements AsbtCreateRequest {
   @IsEnum(RecordStatusesForDB)
-  status?: RecordStatusesForDB;
+  @IsNotEmpty()
+  status: RecordStatusesForDB;
 
   @IsOptional()
-  @IsOptional()
-  pinpp?: string;
+  @IsNotEmpty()
+  pinpp: string;
 
-  @IsOptional()
-  doctype?: any;
+  @IsNotEmpty()
+  doctype: any;
 
-  @IsOptional()
   @IsString()
+  @IsNotEmpty()
   serialnumber: string;
 
-  @IsOptional()
   @IsArray()
   @IsString({ each: true })
+  @IsNotEmpty()
   accessRoles: string[];
 
-  @IsOptional()
   @IsString()
-  login?: string;
+  @IsNotEmpty()
+  login: string;
 
-  @IsOptional()
   @IsString()
-  password?: string;
+  @IsNotEmpty()
+  password: string;
 
-  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  facilityId: string;
+
+  @IsNotEmpty()
   @IsDateString()
   dateTill: Date;
+
+  @IsNotEmpty()
+  @IsDateString()
+  dateFrom: Date;
 }

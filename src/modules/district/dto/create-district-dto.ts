@@ -1,21 +1,21 @@
 import { CreateDistrictRequest } from '@interfaces';
-import { IsNotEmpty, IsString, IsUUID, } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateDistrictDTO implements CreateDistrictRequest {
-    @IsString()
-    @IsNotEmpty()
-    @IsUUID()
-    id: string;
+  @IsString()
+  @IsNotEmpty()
+  @IsUUID()
+  id: string;
 
-    @IsString()
-    @IsNotEmpty()
-    districtName: string;
+  @IsString()
+  @IsNotEmpty()
+  districtName: string;
 
-    @IsNotEmpty()
-    @IsUUID()
-    regionId: string;
+  @IsNotEmpty()
+  @IsUUID()
+  regionId: string;
 
-    @IsNotEmpty()
-    @IsUUID()
-    facilityId: string;
-};
+  @IsNotEmpty()
+  @IsUUID()
+  facilityId: string;
+}

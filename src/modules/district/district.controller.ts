@@ -1,40 +1,45 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { DistrictService } from './district.service';
-import { CreateDistrictDTO, UpdateDistrictDTO } from './dto/index'
+import { CreateDistrictDTO, UpdateDistrictDTO } from './dto/index';
 
 @Controller({
-    path: 'districts',
-    version: '1'
+  path: 'districts',
+  version: '1',
 })
-
 @Controller('districts')
 export class DistrictController {
-    constructor(
-        private readonly districtService: DistrictService
-    ) { }
+  constructor(private readonly districtService: DistrictService) {}
 
-    @Get()
-    getAll() {
-        return this.districtService.findAll();
-    }
+  @Get()
+  getAll() {
+    return this.districtService.findAll();
+  }
 
-    @Get(':id')
-    getOne(@Param('id') id: string) {
-        return this.districtService.findOne(id)
-    }
+  @Get(':id')
+  getOne(@Param('id') id: string) {
+    return this.districtService.findOne(id);
+  }
 
-    @Post()
-    craete(@Body() crateDistrictDto: CreateDistrictDTO) {
-        return this.districtService.create(crateDistrictDto)
-    }
+  @Post()
+  craete(@Body() crateDistrictDto: CreateDistrictDTO) {
+    return this.districtService.create(crateDistrictDto);
+  }
 
-    @Put(':id')
-    update(@Param() id: string, updateDistrictDto: UpdateDistrictDTO) {
-        return this.districtService.update(id, updateDistrictDto)
-    }
+  @Put(':id')
+  update(@Param() id: string, updateDistrictDto: UpdateDistrictDTO) {
+    return this.districtService.update(id, updateDistrictDto);
+  }
 
-    @Delete(':id')
-    remove(@Param() id: string) {
-        return this.districtService.remove(id)
-    }
+  @Delete(':id')
+  remove(@Param() id: string) {
+    return this.districtService.remove(id);
+  }
 }

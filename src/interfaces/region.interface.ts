@@ -12,7 +12,6 @@ export interface UpdateRegionRequest {
   regionName: string;
 }
 
-
 export interface FindRegionRequest {
   id: string;
 }

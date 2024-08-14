@@ -8,18 +8,18 @@ export class AsbtCreateRequestSwagger
   @ApiProperty({
     enum: RecordStatusesForDB,
   })
-  status?: RecordStatusesForDB;
+  status: RecordStatusesForDB;
 
   @ApiProperty({
     type: 'string',
     example: '23456743456321',
   })
-  pinpp?: string; //pinfl
+  pinpp: string; //pinfl
 
   @ApiProperty({
     type: 'integer',
   })
-  doctype?: number;
+  doctype: number;
 
   @ApiProperty({
     type: 'string',
@@ -31,19 +31,25 @@ export class AsbtCreateRequestSwagger
     example: ['admin'],
     type: 'array',
   })
-  accessRoles?: string[];
+  accessRoles: string[];
 
   @ApiProperty({
     type: 'string',
     example: 'lupin228',
   })
-  login?: string;
+  login: string;
 
   @ApiProperty({
     type: 'string',
     example: 'lupin22812344212w22',
   })
-  password?: string;
+  password: string;
+
+  @ApiProperty({
+    type: 'string',
+    example: "'5f4dcc3b5aa765d61d8327deb882cf99',",
+  })
+  facilityId: string;
 
   @ApiProperty({
     type: 'string',

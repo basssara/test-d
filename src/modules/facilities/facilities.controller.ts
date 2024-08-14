@@ -1,16 +1,22 @@
-import { Controller, Get, Post, Param, Delete, Body, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Delete,
+  Body,
+  Put,
+} from '@nestjs/common';
 import { FacilitiesService } from './facilities.service';
 import { CreateFacilityDTO, UpdateFacilityDTO } from './dto/index';
 
-
 @Controller({
   path: 'facilities',
-  version: '1'
+  version: '1',
 })
-
 @Controller('facilities')
 export class FacilitiesController {
-  constructor(private readonly facilitiesService: FacilitiesService) { }
+  constructor(private readonly facilitiesService: FacilitiesService) {}
 
   @Get()
   findAll() {
@@ -28,7 +34,10 @@ export class FacilitiesController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateFacilityDto: UpdateFacilityDTO) {
+  update(
+    @Param('id') id: string,
+    @Body() updateFacilityDto: UpdateFacilityDTO,
+  ) {
     return this.facilitiesService.update(id, updateFacilityDto);
   }
 

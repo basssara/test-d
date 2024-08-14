@@ -9,4 +9,4 @@ import { RegionEntity } from 'entities';
   controllers: [RegionsController],
   providers: [RegionsService],
 })
-export class RegionsModule { }
+export class RegionsModule {}

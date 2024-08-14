@@ -26,7 +26,7 @@ import {
   version: '1',
 })
 export class AuthController {
-  constructor(private readonly service: AuthService) { }
+  constructor(private readonly service: AuthService) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)

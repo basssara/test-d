@@ -1,11 +1,9 @@
 import { UpdateDistrictRequest } from '@interfaces';
-import { IsNotEmpty, IsString, IsUUID, } from 'class-validator';
 
 export class UpdateDistrictDTO implements UpdateDistrictRequest {
+  districtName: string;
 
-    districtName: string;
+  regionId: string;
 
-    regionId: string;
-
-    facilityId: string;
-};
+  facilityId: string;
+}

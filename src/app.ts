@@ -32,9 +32,9 @@ import { DistrictModule } from 'modules/district/district.module';
     FacilitiesModule,
     AuthModule,
     AsbtModule,
-    DistrictModule
+    DistrictModule,
   ],
   controllers: [HealthController],
   providers: [],
 })
-export class App { }
+export class App {}

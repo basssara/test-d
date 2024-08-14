@@ -1,9 +1,9 @@
 import { UpdateFacilityRequest } from '@interfaces';
 
 export class UpdateFacilityDTO implements UpdateFacilityRequest {
-    serviceName: string;
+  serviceName: string;
 
-    userId: string;
+  userId: string;
 
-    regionId: string;
-};
+  regionId: string;
+}
