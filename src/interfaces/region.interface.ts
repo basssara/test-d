@@ -11,11 +11,3 @@ export interface CreateRegionRequest {
 export interface UpdateRegionRequest {
   regionName: string;
 }
-
-export interface FindRegionRequest {
-  id: string;
-}
-
-export interface DeleteRegionRequest {
-  id: string;
-}

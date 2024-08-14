@@ -31,6 +31,11 @@ export class AsbtService {
   async create(
     payload: Omit<AsbtCreateRequest, 'facilityId'>,
   ): Promise<AsbtCreateResponse> {
+
+    let oneYearFromNow = new Date();
+    oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+
+
     const response = await this.#_axios
       .request<AsbtCreateRequest, AxiosResponse<AsbtCreateResponse>>({
         url: '/UserManagement/AddUser',
@@ -45,7 +50,7 @@ export class AsbtService {
           login: payload.login,
           password: payload.password,
           dateFrom: formatDate(new Date(), 'yyyy-MM-dd'),
-          dateTill: formatDate(payload.dateTill, 'yyyy-MM-dd'),
+          dateTill: oneYearFromNow,
         },
       })
       .catch((err: AxiosError) => {

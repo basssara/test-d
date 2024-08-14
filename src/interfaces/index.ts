@@ -9,10 +9,8 @@ export type {
 } from './user.interface';
 export type {
   RegionModel,
-  FindRegionRequest,
   CreateRegionRequest,
   UpdateRegionRequest,
-  DeleteRegionRequest,
 } from './region.interface';
 export type {
   ServiceModel,
