@@ -74,24 +74,24 @@ export class RegionsService {
 
 
     const result: FindRegionResponse = {
-      id: region.id,
-      regionName: region.regionName,
-      districts: region.districts.map((district) => ({
+      id: region?.id,
+      regionName: region?.regionName,
+      districts: region?.districts.map((district) => ({
         id: district?.id,
-        districtName: district.districtName,
+        districtName: district?.districtName,
         facility: {
-          id: district.facility.id,
-          facilityName: district.facility.facilityName,
+          id: district?.facility?.id,
+          facilityName: district?.facility?.facilityName,
           user: {
-            id: district.facility.user.id,
-            status: district.facility.user.status,
-            pinpp: district.facility.user.pinpp,
-            serialNumber: district.facility.user.serialNumber,
-            roles: district.facility.user.accessRoles,
-            login: district.facility.user.login,
-            password: district.facility.user.password,
-            dateFrom: district.facility.user.createdAt,
-            dateTill: district.facility.user.dateTill,
+            id: district?.facility?.user?.id,
+            status: district?.facility?.user?.status,
+            pinpp: district?.facility?.user?.pinpp,
+            serialNumber: district?.facility?.user?.serialNumber,
+            roles: district?.facility?.user?.accessRoles,
+            login: district?.facility?.user?.login,
+            password: district?.facility?.user?.password,
+            dateFrom: district?.facility?.user?.createdAt,
+            dateTill: district?.facility?.user?.dateTill,
           },
         },
       })),
