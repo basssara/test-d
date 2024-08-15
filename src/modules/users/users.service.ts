@@ -11,6 +11,7 @@ import {
   GetUserRequest,
   GetUserResponse,
   UpdateUserRequest,
+  FindUserResponse
 } from '@interfaces';
 import * as bcrypt from 'bcrypt';
 import { AsbtService } from 'clients';
@@ -78,15 +79,15 @@ export class UsersService {
     });
   }
 
-  async findAll() {
-    const users = await this.usersRepository.find();
-    return users;
+  async findAll(): Promise<FindUserResponse[]> {
+    const result: FindUserResponse[] = await this.usersRepository.find();
+    return result;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<FindUserResponse> {
     const user = await this.usersRepository.findOne({
       where: {
-        id: id,
+        id: id
       },
     });
 

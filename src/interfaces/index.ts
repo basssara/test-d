@@ -5,7 +5,7 @@ export type {
   GetUserRequest,
   GetUserResponse,
   UpdateUserRequest,
-  DeleteUserRequest,
+  FindUserResponse
 } from './user.interface';
 export type {
   RegionModel,
