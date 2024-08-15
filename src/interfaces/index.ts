@@ -11,7 +11,6 @@ export type {
   RegionModel,
   CreateRegionRequest,
   UpdateRegionRequest,
-  DeleteRegionRequest,
   FindRegionResponse,
 } from './region.interface';
 export type {
