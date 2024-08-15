@@ -5,12 +5,7 @@ export class CreateFacilityRequestSwagger implements CreateFacilityRequest {
     @ApiProperty({
         example: 'Nimadirda',
     })
-    serviceName: string;
-
-    @ApiProperty({
-        example: 'db3204a3-bccb-4358-998b-4d397ae162e1',
-    })
-    userId: string;
+    facilityName: string;
 
     @ApiProperty({
         example: 'db3204a3-bccb-4358-998b-4d397ae162e2',

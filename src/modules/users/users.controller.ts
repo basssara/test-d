@@ -39,6 +39,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Post()
+  // @UseGuards(CheckPermissionGuard)
+  // @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @HttpCode(HttpStatus.OK)

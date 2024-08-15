@@ -2,9 +2,13 @@ import { AsbtAnswers, ErrorCodes } from '@enums';
 import {
   AsbtCreateRequest,
   AsbtCreateResponse,
+  GetPersonalDocumentRequest,
+  GetPersonalDocumentResponse,
   GetPersonalDataResponse,
   GetPersonalDataWithPassportRequest,
   GetPersonalDataWithPinflRequest,
+  GetPhotoRequest,
+  GetPhotoResponse,
 } from '@interfaces';
 import {
   HttpException,
@@ -33,6 +37,10 @@ export class AsbtService {
       validateStatus: (status: number): boolean => status > 199 && status < 300,
     });
   }
+
+  /**
+   * @Create users
+   */
 
   async create(
     payload: Omit<AsbtCreateRequest, 'facilityId'>,
@@ -72,6 +80,10 @@ export class AsbtService {
     return response.data;
   }
 
+  /**
+   * @GET data from asbt
+   */
+
   async getPersonalDataWithPassport(
     payload: GetPersonalDataWithPassportRequest,
   ): Promise<GetPersonalDataResponse> {
@@ -97,10 +109,45 @@ export class AsbtService {
   ): Promise<GetPersonalDataResponse> {
     const response = await this.#_axios
       .request<
-        GetPersonalDataWithPassportRequest,
+        GetPersonalDataWithPinflRequest,
         AxiosResponse<GetPersonalDataResponse>
       >({
         url: '/GetPersonFull',
+        method: 'GET',
+        params: payload,
+      })
+      .catch((err: AxiosError) => {
+        console.log(err.response.data);
+        throw new HttpException(err.response.data, err.response.status);
+      });
+
+    return response.data;
+  }
+
+  async getPersonalPhoto(payload: GetPhotoRequest): Promise<GetPhotoResponse> {
+    const response = await this.#_axios
+      .request<GetPhotoRequest, AxiosResponse<GetPhotoResponse>>({
+        url: '/GetPersonPhoto',
+        method: 'GET',
+        params: payload,
+      })
+      .catch((err: AxiosError) => {
+        console.log(err.response.data);
+        throw new HttpException(err.response.data, err.response.status);
+      });
+
+    return response.data;
+  }
+
+  async getPersonalDocument(
+    payload: GetPersonalDocumentRequest,
+  ): Promise<GetPersonalDocumentResponse> {
+    const response = await this.#_axios
+      .request<
+        GetPersonalDocumentRequest,
+        AxiosResponse<GetPersonalDocumentResponse>
+      >({
+        url: '/GetPersonDocuments',
         method: 'GET',
         params: payload,
       })

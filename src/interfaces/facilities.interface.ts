@@ -1,18 +1,17 @@
 export interface FacilitiesModel {
   id: string;
-  serviceName: string;
+  facilityName: string;
   userId: string;
   regionId: string;
 }
 
 export interface CreateFacilityRequest {
-  serviceName: string;
-  userId: string;
+  facilityName: string;
   regionId: string;
 }
 
 export interface UpdateFacilityRequest {
-  serviceName: string;
-  userId: string;
-  regionId: string;
+  serviceName?: string;
+  userId?: string;
+  regionId?: string;
 }

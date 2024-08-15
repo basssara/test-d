@@ -29,7 +29,7 @@ export class FacilitiesController {
   }
 
   @Post()
-  create(@Body() createFacilityDto: CreateFacilityDTO) {
+  create(@Body() createFacilityDto: CreateFacilityDTO): Promise<void> {
     return this.facilitiesService.create(createFacilityDto);
   }
 

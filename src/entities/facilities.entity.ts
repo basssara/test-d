@@ -17,7 +17,7 @@ export class FacilityEntity
   id: string;
 
   @Column()
-  serviceName: string;
+  facilityName: string;
 
   @OneToOne(() => UserEntity)
   @JoinColumn({ name: 'userId' })
