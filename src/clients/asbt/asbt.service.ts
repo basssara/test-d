@@ -1,5 +1,11 @@
 import { AsbtAnswers, ErrorCodes } from '@enums';
-import { AsbtCreateRequest, AsbtCreateResponse } from '@interfaces';
+import {
+  AsbtCreateRequest,
+  AsbtCreateResponse,
+  GetPersonalDataResponse,
+  GetPersonalDataWithPassportRequest,
+  GetPersonalDataWithPinflRequest,
+} from '@interfaces';
 import {
   HttpException,
   Injectable,
@@ -57,6 +63,46 @@ export class AsbtService {
       console.log(response.data);
       throw new InternalServerErrorException(ErrorCodes.INTERNAL_SERVER_ERROR);
     }
+
+    return response.data;
+  }
+
+  async getPersonalDataWithPassport(
+    payload: GetPersonalDataWithPassportRequest,
+  ): Promise<GetPersonalDataResponse> {
+    const response = await this.#_axios
+      .request<
+        GetPersonalDataWithPassportRequest,
+        AxiosResponse<GetPersonalDataResponse>
+      >({
+        url: '/GetPersonFull',
+        method: 'GET',
+        params: payload,
+      })
+      .catch((err: AxiosError) => {
+        console.log(err.response.data);
+        throw new HttpException(err.response.data, err.response.status);
+      });
+
+    return response.data;
+  }
+
+  async getPersonalDataWithPinfl(
+    payload: GetPersonalDataWithPinflRequest,
+  ): Promise<GetPersonalDataResponse> {
+    const response = await this.#_axios
+      .request<
+        GetPersonalDataWithPassportRequest,
+        AxiosResponse<GetPersonalDataResponse>
+      >({
+        url: '/GetPersonFull',
+        method: 'GET',
+        params: payload,
+      })
+      .catch((err: AxiosError) => {
+        console.log(err.response.data);
+        throw new HttpException(err.response.data, err.response.status);
+      });
 
     return response.data;
   }

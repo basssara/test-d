@@ -10,9 +10,9 @@ import { ServiceEntity } from './services.entity';
 import { UserModel } from '@interfaces';
 import { FacilityEntity } from './facilities.entity';
 
-export enum RecordStatusesForDB {
-  ACTIVE_NEW = 'active_new',
-  CANCELL = 'cancell',
+export enum RecordStatuses {
+  ACTIVATION = 'activation',
+  DELETE = 'delete',
   EDIT = 'edit',
 }
 
@@ -26,10 +26,10 @@ export class UserEntity implements Omit<UserModel, 'dateFrom'> {
 
   @Column({
     type: 'enum',
-    enum: RecordStatusesForDB,
-    default: RecordStatusesForDB.ACTIVE_NEW,
+    enum: RecordStatuses,
+    default: RecordStatuses.ACTIVATION,
   })
-  status: RecordStatusesForDB;
+  status: RecordStatuses;
 
   @Column({ type: 'varchar' })
   login: string;

@@ -36,12 +36,7 @@ import {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // @Post()
-  // create(@Body() createUserDto: CreateUserRequestDto) {
-  //   return this.usersService.create(createUserDto);
-  // }
-
-  @Post('asbt')
+  @Post()
   // @UseGuards(CheckPermissionGuard)
   // @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.OK)
@@ -68,7 +63,7 @@ export class UsersController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
   })
   createNewUserForAsbt(@Body() body: CreateAsbtRequestDto) {
-    return this.usersService.createNewUserForAsbt(body);
+    return this.usersService.create(body);
   }
 
   @Get()

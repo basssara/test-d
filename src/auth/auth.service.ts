@@ -35,11 +35,10 @@ export class AuthService {
         roles: user.role,
       },
       jwtConstants.secret,
-      60 * 60 * 30,
+      60 * 60 * 9,
     );
 
     return {
-      id: user.id,
       accessToken,
       refreshToken,
     };

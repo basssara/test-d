@@ -5,10 +5,10 @@ import {
 
 export const statusConvert = (status: string) => {
   switch (status) {
-    case RecordStatusesForDB.ACTIVE_NEW:
-      return RecordStatuses.ACTIVE_NEW;
-    case RecordStatusesForDB.CANCELL:
-      return RecordStatuses.CANCELL;
+    case RecordStatusesForDB.ACTIVATION:
+      return RecordStatuses.ACTIVATION;
+    case RecordStatusesForDB.DELETE:
+      return RecordStatuses.DELETE;
     case RecordStatusesForDB.EDIT:
       return RecordStatuses.EDIT;
   }

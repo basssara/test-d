@@ -21,6 +21,11 @@ export type {
   FindServiceRsponse,
   UpdateServiceRequest,
   DeleteServiceRequest,
+  GetPersonalDataWithPinflRequest,
+  GetPersonalDataWithPassportRequest,
+  GetPhotoRequest,
+  GetPhotoResponse,
+  GetPersonalDataResponse,
 } from './service.interface';
 export type {
   FacilitiesModel,
