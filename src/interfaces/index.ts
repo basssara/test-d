@@ -46,4 +46,5 @@ export type {
   DistrictsModel,
   CreateDistrictRequest,
   UpdateDistrictRequest,
+  FindDistrictResponse
 } from './district.interface';

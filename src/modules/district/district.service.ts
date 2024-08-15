@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FacilityEntity, RegionEntity, DistrictEntity } from 'entities';
 import { Repository } from 'typeorm';
-import { CreateDistrictRequest } from '@interfaces';
+import { CreateDistrictRequest, FindDistrictResponse } from '@interfaces';
 
 @Injectable()
 export class DistrictService {
@@ -15,11 +15,41 @@ export class DistrictService {
 
     @InjectRepository(RegionEntity)
     private readonly RegionRepository: Repository<RegionEntity>,
-  ) {}
+  ) { }
 
-  async findAll() {
-    const districts = await this.DistrictRepository.find();
-    return districts;
+  async findAll(): Promise<FindDistrictResponse[]> {
+    const result: FindDistrictResponse[] = [];
+
+    const districts = await this.DistrictRepository.find(
+      {
+        relations: {
+          facility: { user: true },
+        },
+      }
+    );
+
+    for (const district of districts) {
+      result.push({
+        id: district?.id,
+        districtName: district?.districtName,
+        facility: {
+          id: district?.facility?.id,
+          facilityName: district?.facility?.facilityName,
+          user: {
+            id: district?.facility?.user?.id,
+            status: district?.facility?.user?.status,
+            pinpp: district?.facility?.user?.pinpp,
+            serialNumber: district?.facility?.user?.serialNumber,
+            roles: district?.facility?.user?.accessRoles,
+            login: district?.facility?.user?.login,
+            password: district?.facility?.user?.password,
+            dateFrom: district?.facility?.user?.createdAt,
+            dateTill: district?.facility?.user?.dateTill,
+          },
+        },
+      })
+    }
+    return result
   }
 
   async findOne(id: string) {
