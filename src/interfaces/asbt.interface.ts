@@ -1,15 +1,14 @@
-import { RecordStatusesForDB } from 'enums/record-statuses.enum';
+import { RecordStatuses } from 'entities';
 
 export interface AsbtCreateRequest {
   guid?: string;
-  status: RecordStatusesForDB;
+  status: RecordStatuses;
   pinpp: string;
   doctype: number;
   serialnumber: string;
   accessRoles: string[];
   login: string;
   password: string;
-  facilityId: string;
   dateFrom?: Date;
   dateTill: Date;
 }

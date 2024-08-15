@@ -1,15 +1,7 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDtoRequest } from './dto/login.dto';
 import { LoginResponse } from '@interfaces';
-import { Request } from 'express';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   ForbiddenResponse,
@@ -53,13 +45,8 @@ export class AuthController {
     type: InternalServerErrorResponse,
     status: HttpStatus.INTERNAL_SERVER_ERROR,
   })
-  async login(
-    @Body() body: LoginDtoRequest,
-    @Req() req: Request,
-  ): Promise<Omit<LoginResponse, 'id' | 'roles'>> {
-    const { accessToken, refreshToken, id } = await this.service.login(body);
-
-    req.session.user = { id };
+  async login(@Body() body: LoginDtoRequest): Promise<LoginResponse> {
+    const { accessToken, refreshToken } = await this.service.login(body);
 
     return {
       accessToken: accessToken,

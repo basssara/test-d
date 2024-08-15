@@ -1,8 +1,8 @@
-import { RecordStatusesForDB } from 'entities';
+import { RecordStatuses } from 'entities';
 
 export interface UserModel {
   guid?: string;
-  status?: RecordStatusesForDB;
+  status?: RecordStatuses;
   pinpp?: string;
   doctype?: number;
   serialNumber: string;
@@ -15,15 +15,16 @@ export interface UserModel {
 
 export interface CreateUserRequest {
   guid?: string;
-  status?: RecordStatusesForDB;
-  pinpp?: string;
-  doctype?: number;
+  status: RecordStatuses;
+  pinpp: string;
+  doctype: number;
   serialNumber: string;
-  roles?: string[];
-  login?: string;
-  password?: string;
-  dateFrom: Date;
-  dateTill: Date;
+  accessRoles: string[];
+  login: string;
+  password: string;
+  facilityId: string;
+  dateFrom?: Date;
+  dateTill?: Date;
 }
 
 export interface GetUserRequest {

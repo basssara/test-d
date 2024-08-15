@@ -1,4 +1,4 @@
-import type { AsbtCreateRequest } from '@interfaces';
+import type { CreateUserRequest } from '@interfaces';
 import {
   IsArray,
   IsDateString,
@@ -7,12 +7,13 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+import { RecordStatuses } from 'entities';
 import { RecordStatusesForDB } from 'enums/record-statuses.enum';
 
-export class CreateAsbtRequestDto implements AsbtCreateRequest {
+export class CreateAsbtRequestDto implements CreateUserRequest {
   @IsEnum(RecordStatusesForDB)
   @IsNotEmpty()
-  status: RecordStatusesForDB;
+  status: RecordStatuses;
 
   @IsOptional()
   @IsNotEmpty()
@@ -23,7 +24,7 @@ export class CreateAsbtRequestDto implements AsbtCreateRequest {
 
   @IsString()
   @IsNotEmpty()
-  serialnumber: string;
+  serialNumber: string;
 
   @IsArray()
   @IsString({ each: true })

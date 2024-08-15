@@ -1,14 +1,14 @@
 import { AsbtCreateRequest } from '@interfaces';
 import { ApiProperty } from '@nestjs/swagger';
-import { RecordStatusesForDB } from 'enums/record-statuses.enum';
+import { RecordStatuses } from 'entities';
 
 export class AsbtCreateRequestSwagger
   implements Omit<AsbtCreateRequest, 'dateFrom'>
 {
   @ApiProperty({
-    enum: RecordStatusesForDB,
+    enum: RecordStatuses,
   })
-  status: RecordStatusesForDB;
+  status: RecordStatuses;
 
   @ApiProperty({
     type: 'string',

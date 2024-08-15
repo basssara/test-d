@@ -1,11 +1,11 @@
 export enum RecordStatuses {
-  ACTIVE_NEW = 1,
-  CANCELL = 0,
+  ACTIVATION = 1,
+  DELETE = 0,
   EDIT = 2,
 }
 
 export enum RecordStatusesForDB {
-  ACTIVE_NEW = 'active_new',
-  CANCELL = 'cancell',
+  ACTIVATION = 'activation',
+  DELETE = 'delete',
   EDIT = 'edit',
 }
