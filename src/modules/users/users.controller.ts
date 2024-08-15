@@ -24,8 +24,8 @@ import {
   UnauthorizedResponse,
   UnprocessableEntityResponse,
 } from 'swagger';
-// import { Roles } from 'decorators';
-// import { Roles as Role } from '@enums';
+import { Roles } from 'decorators';
+import { Roles as Role } from '@enums';
 // import { CheckPermissionGuard } from 'guards';
 
 @ApiTags('User Service')
@@ -38,7 +38,7 @@ export class UsersController {
 
   @Post()
   // @UseGuards(CheckPermissionGuard)
-  // @Roles(Role.ADMIN)
+  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiBody({
     type: AsbtCreateRequestSwagger,
@@ -67,11 +67,15 @@ export class UsersController {
   }
 
   @Get()
+  // @UseGuards(CheckPermissionGuard)
+  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  // @UseGuards(CheckPermissionGuard)
+  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
@@ -82,11 +86,15 @@ export class UsersController {
   }
 
   @Patch(':id')
+  // @UseGuards(CheckPermissionGuard)
+  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
+  // @UseGuards(CheckPermissionGuard)
+  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
