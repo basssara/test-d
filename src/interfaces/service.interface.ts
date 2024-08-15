@@ -81,9 +81,26 @@ export interface GetPersonalDataResponse {
   mother?: Mother;
 }
 
-export interface GetPhotoRequest {}
+export interface GetPhotoRequest {
+  id: string;
+}
 
-export interface GetPhotoResponse {}
+export interface GetPhotoResponse {
+  bytes: [];
+}
+
+export interface GetPersonalDocumentRequest {
+  id: string;
+}
+
+export interface GetPersonalDocumentResponse {
+  documentType: number;
+  serialNumber: string;
+  issuedBy: string;
+  dateIssue: Date;
+  dateValid: Date;
+  documentStatus: number;
+}
 
 export interface ServiceModel {
   serviceName: string;

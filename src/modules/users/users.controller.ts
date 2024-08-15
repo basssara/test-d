@@ -8,6 +8,7 @@ import {
   Patch,
   HttpCode,
   HttpStatus,
+  UseGuards,
   // UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -26,7 +27,7 @@ import {
 } from 'swagger';
 import { Roles } from 'decorators';
 import { Roles as Role } from '@enums';
-// import { CheckPermissionGuard } from 'guards';
+import { CheckPermissionGuard } from 'guards';
 
 @ApiTags('User Service')
 @Controller({
@@ -38,7 +39,7 @@ export class UsersController {
 
   @Post()
   // @UseGuards(CheckPermissionGuard)
-  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
+  // @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiBody({
     type: AsbtCreateRequestSwagger,

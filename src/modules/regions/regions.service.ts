@@ -1,7 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegionEntity } from 'entities';
-import { CreateRegionRequest, UpdateRegionRequest } from '@interfaces';
+import {
+  CreateRegionRequest,
+  FindRegionResponse,
+  UpdateRegionRequest,
+} from '@interfaces';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -11,10 +15,44 @@ export class RegionsService {
     private readonly regionRepository: Repository<RegionEntity>,
   ) {}
 
-  async findAll() {
-    const regions = await this.regionRepository.find();
+  async findAll(): Promise<FindRegionResponse[]> {
+    const result: FindRegionResponse[] = [];
 
-    return regions;
+    const regions = await this.regionRepository.find({
+      relations: {
+        districts: {
+          facility: { user: true },
+        },
+      },
+    });
+
+    for (const region of regions) {
+      result.push({
+        id: region.id,
+        regionName: region.regionName,
+        districts: region.districts.map((district) => ({
+          id: district.id,
+          districtName: district.districtName,
+          facility: {
+            id: district.facility.id,
+            facilityName: district.facility.facilityName,
+            user: {
+              id: district.facility.user.id,
+              status: district.facility.user.status,
+              pinpp: district.facility.user.pinpp,
+              serialNumber: district.facility.user.serialNumber,
+              roles: district.facility.user.accessRoles,
+              login: district.facility.user.login,
+              password: district.facility.user.password,
+              dateFrom: district.facility.user.createdAt,
+              dateTill: district.facility.user.dateTill,
+            },
+          },
+        })),
+      });
+    }
+
+    return result;
   }
 
   async findOne(id: string) {
@@ -22,9 +60,10 @@ export class RegionsService {
       where: {
         id: id,
       },
+      relations: { districts: true },
     });
 
-    if (!region || !region.id) {
+    if (!region.id) {
       return new NotFoundException('Region not found');
     }
 
@@ -32,8 +71,8 @@ export class RegionsService {
   }
 
   async create(dto: CreateRegionRequest): Promise<RegionEntity> {
-    const new_region = this.regionRepository.create(dto);
-    return await this.regionRepository.save(new_region);
+    const newRegion = this.regionRepository.create(dto);
+    return await this.regionRepository.save(newRegion);
   }
 
   async update(

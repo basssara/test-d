@@ -13,6 +13,7 @@ export type {
   CreateRegionRequest,
   UpdateRegionRequest,
   DeleteRegionRequest,
+  FindRegionResponse,
 } from './region.interface';
 export type {
   ServiceModel,
@@ -23,9 +24,11 @@ export type {
   DeleteServiceRequest,
   GetPersonalDataWithPinflRequest,
   GetPersonalDataWithPassportRequest,
+  GetPersonalDataResponse,
   GetPhotoRequest,
   GetPhotoResponse,
-  GetPersonalDataResponse,
+  GetPersonalDocumentRequest,
+  GetPersonalDocumentResponse,
 } from './service.interface';
 export type {
   FacilitiesModel,
