@@ -52,7 +52,7 @@ export class DistrictService {
     return result
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<FindDistrictResponse> {
     const district = await this.DistrictRepository.findOne({
       where: {
         id: id,

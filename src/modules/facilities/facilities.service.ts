@@ -45,7 +45,7 @@ export class FacilitiesService {
     return result;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<FindFacilityResponse> {
     const facility = await this.facilityRepository.findOne({
       where: {
         id: id,
