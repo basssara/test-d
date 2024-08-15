@@ -27,7 +27,7 @@ export class UsersService {
     @InjectRepository(FacilityEntity)
     private readonly facilityRepository: Repository<FacilityEntity>,
     private readonly asbtService: AsbtService,
-  ) {}
+  ) { }
 
   async create(data: CreateUserRequest): Promise<void> {
     const saltOrRounds = 10;
