@@ -57,12 +57,36 @@ export class DistrictService {
       where: {
         id: id,
       },
+
+      relations: {
+        facility: { user: true },
+      },
     });
 
-    if (!district || !district.id) {
+    if (!district) {
       throw new NotFoundException('District not found!');
     }
-    return district;
+
+    const result: FindDistrictResponse = {
+      id: district?.id,
+      districtName: district?.districtName,
+      facility: {
+        id: district?.facility?.id,
+        facilityName: district?.facility?.facilityName,
+        user: {
+          id: district?.facility?.user?.id,
+          status: district?.facility?.user?.status,
+          pinpp: district?.facility?.user?.pinpp,
+          serialNumber: district?.facility?.user?.serialNumber,
+          roles: district?.facility?.user?.accessRoles,
+          login: district?.facility?.user?.login,
+          password: district?.facility?.user?.password,
+          dateFrom: district?.facility?.user?.createdAt,
+          dateTill: district?.facility?.user?.dateTill,
+        },
+      },
+    }
+    return result;
   }
 
   async create(
