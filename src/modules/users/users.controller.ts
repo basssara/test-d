@@ -8,6 +8,7 @@ import {
   Patch,
   HttpCode,
   HttpStatus,
+  UseGuards,
   // UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -26,6 +27,7 @@ import {
 } from 'swagger';
 import { Roles } from 'decorators';
 import { Roles as Role } from '@enums';
+import { CheckPermissionGuard } from 'guards';
 // import { CheckPermissionGuard } from 'guards';
 
 @ApiTags('User Service')
@@ -34,10 +36,10 @@ import { Roles as Role } from '@enums';
   version: '1',
 })
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
-  // @UseGuards(CheckPermissionGuard)
+  @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiBody({
@@ -67,14 +69,14 @@ export class UsersController {
   }
 
   @Get()
-  // @UseGuards(CheckPermissionGuard)
+  @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  // @UseGuards(CheckPermissionGuard)
+  @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
@@ -86,14 +88,14 @@ export class UsersController {
   }
 
   @Patch(':id')
-  // @UseGuards(CheckPermissionGuard)
+  @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  // @UseGuards(CheckPermissionGuard)
+  @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
