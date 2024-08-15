@@ -32,6 +32,7 @@ export type {
   FacilitiesModel,
   CreateFacilityRequest,
   UpdateFacilityRequest,
+  FindFacilityResponse
 } from './facilities.interface';
 export type {
   ApplicationModel,
