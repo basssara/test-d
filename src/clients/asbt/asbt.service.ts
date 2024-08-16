@@ -88,13 +88,7 @@ export class AsbtService implements OnModuleInit {
         dateTill: formatDate(payload.dateTill, 'yyyy-MM-dd'),
       },
     });
-
-    if (response.data.AnswereId !== AsbtAnswers.OK) {
-      console.log(response.data);
-      throw new InternalServerErrorException(ErrorCodes.INTERNAL_SERVER_ERROR, {
-        cause: response.data,
-      });
-    }
+    console.log(response.data);
 
     return response.data;
   }
