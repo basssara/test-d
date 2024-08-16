@@ -48,6 +48,3 @@ export type {
   UpdateDistrictRequest,
   FindDistrictResponse
 } from './district.interface';
-export type {
-  Pagination
-} from './pagination.interface'

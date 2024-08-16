@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Put,
+  Query,
 } from '@nestjs/common';
 import { FacilitiesService } from './facilities.service';
 import { CreateFacilityDTO, UpdateFacilityDTO } from './dto/index';
@@ -16,11 +17,15 @@ import { CreateFacilityDTO, UpdateFacilityDTO } from './dto/index';
 })
 @Controller('facilities')
 export class FacilitiesController {
-  constructor(private readonly facilitiesService: FacilitiesService) {}
+  constructor(private readonly facilitiesService: FacilitiesService) { }
 
   @Get()
-  findAll() {
-    return this.facilitiesService.findAll();
+  findAll(
+    @Query('page') page: number,
+    @Query('limit') limit: number
+  ) {
+    return this.facilitiesService.findAll({ page, limit });
+
   }
 
   @Get(':id')

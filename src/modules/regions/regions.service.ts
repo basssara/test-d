@@ -4,8 +4,7 @@ import { RegionEntity } from 'entities';
 import {
   CreateRegionRequest,
   FindRegionResponse,
-  UpdateRegionRequest,
-  Pagination
+  UpdateRegionRequest
 } from '@interfaces';
 import { Repository } from 'typeorm';
 
@@ -16,7 +15,7 @@ export class RegionsService {
     private readonly regionRepository: Repository<RegionEntity>,
   ) { }
 
-  async findAll(pagination: Pagination): Promise<FindRegionResponse[]> {
+  async findAll(pagination: any): Promise<FindRegionResponse[]> {
     const result: FindRegionResponse[] = [];
     const { page = 1, limit = 10 } = pagination;
 

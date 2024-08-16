@@ -17,6 +17,7 @@ import * as bcrypt from 'bcrypt';
 import { AsbtService } from 'clients';
 import { uuid } from 'helpers';
 import { ErrorCodes } from '@enums';
+import { skip, take } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -79,8 +80,16 @@ export class UsersService {
     });
   }
 
-  async findAll(): Promise<FindUserResponse[]> {
-    const result: FindUserResponse[] = await this.usersRepository.find();
+  async findAll(pagination: any): Promise<FindUserResponse[]> {
+
+    const { page = 1, limit = 10 } = pagination
+
+    const result: FindUserResponse[] = await this.usersRepository.find(
+      {
+        skip: (page - 1) * limit,
+        take: limit
+      }
+    );
     return result;
   }
 

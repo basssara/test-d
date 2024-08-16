@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import {
   CreateServiceRequest,
   FindServiceRsponse,
@@ -13,16 +13,22 @@ export class ServicesService {
   constructor(
     @InjectRepository(ServiceEntity)
     private readonly serviceRepository: Repository<ServiceEntity>,
-  ) {}
+  ) { }
 
-  async getPersonalData() {}
+  async getPersonalData() { }
 
   async create(data: Omit<CreateServiceRequest, 'userId'>): Promise<void> {
     await this.serviceRepository.save(data);
   }
 
-  async findAll(): Promise<FindServiceRsponse[]> {
-    const data = await this.serviceRepository.find();
+  async findAll(pagination: any): Promise<FindServiceRsponse[]> {
+    const { page = 1, limit = 10 } = pagination
+    const data = await this.serviceRepository.find(
+      {
+        take: (page - 1) * limit,
+        skip: limit
+      }
+    );
 
     return data.map((item) => ({
       id: item.id,

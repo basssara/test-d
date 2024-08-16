@@ -34,7 +34,7 @@ export class ServicesController {
   constructor(
     private readonly service: ServicesService,
     private readonly asbtService: AsbtService,
-  ) {}
+  ) { }
 
   @Post()
   create(@Body() createServiceDto: any) {
@@ -174,8 +174,11 @@ export class ServicesController {
   }
 
   @Get()
-  findAll() {
-    return this.service.findAll();
+  findAll(
+    @Query('page') page: string,
+    @Query('limit') limit: string
+  ) {
+    return this.service.findAll({ page, limit });
   }
 
   @Get(':id')

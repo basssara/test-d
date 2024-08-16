@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  Query,
   // UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -71,10 +72,13 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(CheckPermissionGuard)
-  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
-  findAll() {
-    return this.usersService.findAll();
+  // @UseGuards(CheckPermissionGuard)
+  // @Roles(Role.SUPER_ADMIN, Role.ADMIN)
+  findAll(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.usersService.findAll({ page, limit });
   }
 
   @Get(':id')

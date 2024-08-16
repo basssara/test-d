@@ -11,15 +11,21 @@ export class ApplicationService {
     private readonly serviceRepository: Repository<ServiceEntity>,
     @InjectRepository(ApplicationEntity)
     private readonly applicationRepository: Repository<ApplicationEntity>,
-  ) {}
+  ) { }
 
   async create(data: any) {
     const new_application = await this.applicationRepository.create(data);
     return await this.applicationRepository.save(new_application);
   }
 
-  async findAll() {
-    const applications = await this.applicationRepository.find();
+  async findAll(pagination: any) {
+    const { page, limit } = pagination
+    const applications = await this.applicationRepository.find(
+      {
+        skip: (page - 1) * limit,
+        take: limit
+      }
+    );
     return {
       message: 'succes',
       data: applications,

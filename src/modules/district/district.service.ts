@@ -17,14 +17,18 @@ export class DistrictService {
     private readonly RegionRepository: Repository<RegionEntity>,
   ) { }
 
-  async findAll(): Promise<FindDistrictResponse[]> {
+  async findAll(pagination: any): Promise<FindDistrictResponse[]> {
     const result: FindDistrictResponse[] = [];
+    const { page = 1, limit = 10 } = pagination;
+
 
     const districts = await this.DistrictRepository.find(
       {
         relations: {
           facility: { user: true },
         },
+        skip: (page - 1) * limit,
+        take: limit
       }
     );
 

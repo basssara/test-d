@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { DistrictService } from './district.service';
 import { CreateDistrictDTO, UpdateDistrictDTO } from './dto/index';
@@ -16,11 +17,14 @@ import { CreateDistrictDTO, UpdateDistrictDTO } from './dto/index';
 })
 @Controller('districts')
 export class DistrictController {
-  constructor(private readonly districtService: DistrictService) {}
+  constructor(private readonly districtService: DistrictService) { }
 
   @Get()
-  getAll() {
-    return this.districtService.findAll();
+  getAll(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.districtService.findAll({ page, limit });
   }
 
   @Get(':id')

@@ -14,14 +14,16 @@ export class FacilitiesService {
     private readonly regionRepository: Repository<RegionEntity>,
   ) { }
 
-  async findAll(): Promise<FindFacilityResponse[]> {
-
+  async findAll(pagination: any): Promise<FindFacilityResponse[]> {
     const result: FindFacilityResponse[] = []
+    const { page, limit } = pagination
 
     const facilities = await this.facilityRepository.find({
       relations: {
         user: true
-      }
+      },
+      skip: (page - 1) * limit,
+      take: page
     });
 
     for (const facility of facilities) {
