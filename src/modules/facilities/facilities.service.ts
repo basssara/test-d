@@ -16,14 +16,14 @@ export class FacilitiesService {
 
   async findAll(pagination: any): Promise<FindFacilityResponse[]> {
     const result: FindFacilityResponse[] = []
-    const { page, limit } = pagination
+    const { page = 1, limit = 10 } = pagination
 
     const facilities = await this.facilityRepository.find({
       relations: {
         user: true
       },
       skip: (page - 1) * limit,
-      take: page
+      take: limit
     });
 
     for (const facility of facilities) {

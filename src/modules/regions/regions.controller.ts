@@ -29,10 +29,6 @@ import {
 } from 'swagger';
 import { uuid } from 'helpers';
 
-@Controller({
-  path: 'regions',
-  version: '1',
-})
 @ApiTags('Regions Service')
 @Controller({
   path: 'regions',
