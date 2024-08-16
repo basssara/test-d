@@ -39,7 +39,6 @@ export class RegionsService {
             facilityName: district.facility.facilityName,
             user: {
               id: district.facility.user.id,
-              status: district.facility.user.status,
               pinpp: district.facility.user.pinpp,
               serialNumber: district.facility.user.serialNumber,
               roles: district.facility.user.accessRoles,

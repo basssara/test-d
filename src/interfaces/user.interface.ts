@@ -15,7 +15,6 @@ export interface UserModel {
 
 export interface CreateUserRequest {
   guid?: string;
-  status: RecordStatuses;
   pinpp: string;
   doctype: number;
   serialNumber: string;
@@ -40,7 +39,6 @@ export interface GetUserResponse {
 
 export interface UpdateUserRequest {
   guid?: string;
-  status?: RecordStatuses;
   pinpp?: string;
   doctype?: number;
   serialNumber?: string;

@@ -1,5 +1,3 @@
-import { RecordStatuses } from 'entities';
-
 export interface RegionModel {
   id: string;
   regionName: string;
@@ -20,7 +18,6 @@ export interface FindRegionRequest {
 
 interface User {
   id: string;
-  status: RecordStatuses;
   pinpp: string;
   serialNumber: string;
   roles: string[];
