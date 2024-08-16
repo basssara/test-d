@@ -94,11 +94,17 @@ export class AsbtService {
       >({
         url: '/GetPersonFull',
         method: 'GET',
-        params: payload,
+        params: {
+          Doctype: payload.doctype,
+          SerialNumber: payload.serialNumber,
+          DateBirth: payload.dateBirth,
+          Address: payload.address,
+          Parrents: payload.parrents,
+        },
       })
       .catch((err: AxiosError) => {
         console.log(err.response.data);
-        throw new HttpException(err.response.data, err.response.status);
+        throw new HttpException(err.cause.message, err.response.status);
       });
 
     return response.data;
@@ -114,7 +120,11 @@ export class AsbtService {
       >({
         url: '/GetPersonFull',
         method: 'GET',
-        params: payload,
+        params: {
+          Pinpp: payload.pinpp,
+          Address: payload.address,
+          Parrents: payload.parrents,
+        },
       })
       .catch((err: AxiosError) => {
         console.log(err.response.data);
@@ -129,7 +139,9 @@ export class AsbtService {
       .request<GetPhotoRequest, AxiosResponse<GetPhotoResponse>>({
         url: '/GetPersonPhoto',
         method: 'GET',
-        params: payload,
+        params: {
+          Guid: payload.id,
+        },
       })
       .catch((err: AxiosError) => {
         console.log(err.response.data);
@@ -149,7 +161,9 @@ export class AsbtService {
       >({
         url: '/GetPersonDocuments',
         method: 'GET',
-        params: payload,
+        params: {
+          Guid: payload.id,
+        },
       })
       .catch((err: AxiosError) => {
         console.log(err.response.data);

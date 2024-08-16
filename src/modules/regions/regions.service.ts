@@ -5,6 +5,7 @@ import {
   CreateRegionRequest,
   FindRegionResponse,
   UpdateRegionRequest,
+  Pagination
 } from '@interfaces';
 import { Repository } from 'typeorm';
 
@@ -15,15 +16,20 @@ export class RegionsService {
     private readonly regionRepository: Repository<RegionEntity>,
   ) { }
 
-  async findAll(): Promise<FindRegionResponse[]> {
+  async findAll(pagination: Pagination): Promise<FindRegionResponse[]> {
     const result: FindRegionResponse[] = [];
+    const { page = 1, limit = 10 } = pagination;
 
     const regions = await this.regionRepository.find({
+      where: { deletedAt: null },
       relations: {
         districts: {
           facility: { user: true },
         },
       },
+      skip: (page - 1) * limit,
+      take: limit
+
     });
 
     for (const region of regions) {

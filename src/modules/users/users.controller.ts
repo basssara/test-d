@@ -66,7 +66,7 @@ export class UsersController {
     type: InternalServerErrorResponse,
     status: HttpStatus.INTERNAL_SERVER_ERROR,
   })
-  createNewUserForAsbt(@Body() body: CreateAsbtRequestDto) {
+  createNewUserForAsbt(@Body() body: CreateAsbtRequestDto): Promise<void> {
     return this.usersService.create(body);
   }
 
@@ -92,14 +92,17 @@ export class UsersController {
   @Patch(':id')
   @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<void> {
+    return this.usersService.update({ guid: id, ...updateUserDto });
   }
 
   @Delete(':id')
   @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<void> {
     return this.usersService.remove(id);
   }
 }

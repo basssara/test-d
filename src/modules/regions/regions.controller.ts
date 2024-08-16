@@ -8,9 +8,10 @@ import {
   Put,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { RegionsService } from './regions.service';
-import { createRegionDto } from './dto/create.region.dto';
+import { createRegionDto, PaginationDto } from './dto/index';
 import { ApiTags, ApiResponse, ApiBody, ApiParam, ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
 import {
   ForbiddenResponse,
@@ -66,8 +67,9 @@ export class RegionsController {
     type: InternalServerErrorResponse,
     status: HttpStatus.INTERNAL_SERVER_ERROR,
   })
-  findAll() {
-    return this.regionsService.findAll();
+  findAll(@Query() paginationDto: any) {
+    console.log(paginationDto);
+    return this.regionsService.findAll(paginationDto);
   }
 
   @Get(':id')

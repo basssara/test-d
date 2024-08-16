@@ -1,8 +1,16 @@
 import type { UpdateUserRequest } from '@interfaces';
+import { RecordStatuses } from 'entities';
 
 export class UpdateUserDto implements UpdateUserRequest {
-  id: string;
-  login: string;
-  password: string;
-  role: string[];
+  guid?: string;
+  status?: RecordStatuses;
+  pinpp?: string;
+  doctype?: number;
+  serialNumber?: string;
+  accessRoles?: string[];
+  login?: string;
+  password?: string;
+  facilityId?: string;
+  dateFrom?: Date;
+  dateTill?: Date;
 }
