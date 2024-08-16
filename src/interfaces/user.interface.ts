@@ -39,10 +39,17 @@ export interface GetUserResponse {
 }
 
 export interface UpdateUserRequest {
-  id?: string;
+  guid?: string;
+  status?: RecordStatuses;
+  pinpp?: string;
+  doctype?: number;
+  serialNumber?: string;
+  accessRoles?: string[];
   login?: string;
   password?: string;
-  role?: string[];
+  facilityId?: string;
+  dateFrom?: Date;
+  dateTill?: Date;
 }
 
 export interface DeleteUserRequest {

@@ -19,6 +19,7 @@ export class RegionsService {
     const result: FindRegionResponse[] = [];
 
     const regions = await this.regionRepository.find({
+      where: { deletedAt: null },
       relations: {
         districts: {
           facility: { user: true },

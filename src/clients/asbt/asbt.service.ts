@@ -23,7 +23,7 @@ import { formatDate, roleConvert, statusConvert } from 'helpers';
 export class AsbtService {
   readonly #_axios: AxiosInstance;
   readonly token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiIiwiVXNlcklkIjoiMTAwMTAzOCIsIlN1YnN5c3RlbSI6IjEiLCJMT0NBTCBBVVRIT1JJVFkiOiJBc2J0QXV0aDIuMFNlcnZlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IjQwMDAxMDAiLCJuYmYiOjE3MjM1NTA3MTAsImV4cCI6MTcyMzYzNzExMCwiaXNzIjoiQXNidEF1dGgyLjBTZXJ2ZXIiLCJhdWQiOiJodHRwOi8vYXNidC51ei8ifQ.QHhjX3jzmacCceIoOF4HdwWx50zdULPQ2R5J2cOFYm4';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiIiwiVXNlcklkIjoiMTAwMTAzOCIsIlN1YnN5c3RlbSI6IjEiLCJMT0NBTCBBVVRIT1JJVFkiOiJBc2J0QXV0aDIuMFNlcnZlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IjQwMDAxMDAiLCJuYmYiOjE3MjM2OTY0NDcsImV4cCI6MTcyMzc4Mjg0NywiaXNzIjoiQXNidEF1dGgyLjBTZXJ2ZXIiLCJhdWQiOiJodHRwOi8vYXNidC51ei8ifQ.WOkL1KJ8GIw2UloyuCbmJ1CtBwFuDGOJZv2UqdVHUQ4';
 
   constructor(config: ConfigService) {
     this.#_axios = axios.create({
@@ -89,11 +89,17 @@ export class AsbtService {
       >({
         url: '/GetPersonFull',
         method: 'GET',
-        params: payload,
+        params: {
+          Doctype: payload.doctype,
+          SerialNumber: payload.serialNumber,
+          DateBirth: payload.dateBirth,
+          Address: payload.address,
+          Parrents: payload.parrents,
+        },
       })
       .catch((err: AxiosError) => {
         console.log(err.response.data);
-        throw new HttpException(err.response.data, err.response.status);
+        throw new HttpException(err.cause.message, err.response.status);
       });
 
     return response.data;
@@ -109,7 +115,11 @@ export class AsbtService {
       >({
         url: '/GetPersonFull',
         method: 'GET',
-        params: payload,
+        params: {
+          Pinpp: payload.pinpp,
+          Address: payload.address,
+          Parrents: payload.parrents,
+        },
       })
       .catch((err: AxiosError) => {
         console.log(err.response.data);
@@ -124,7 +134,9 @@ export class AsbtService {
       .request<GetPhotoRequest, AxiosResponse<GetPhotoResponse>>({
         url: '/GetPersonPhoto',
         method: 'GET',
-        params: payload,
+        params: {
+          Guid: payload.id,
+        },
       })
       .catch((err: AxiosError) => {
         console.log(err.response.data);
@@ -144,7 +156,9 @@ export class AsbtService {
       >({
         url: '/GetPersonDocuments',
         method: 'GET',
-        params: payload,
+        params: {
+          Guid: payload.id,
+        },
       })
       .catch((err: AxiosError) => {
         console.log(err.response.data);

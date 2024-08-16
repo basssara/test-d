@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FacilityEntity, UserEntity } from 'entities';
+import { FacilityEntity, RecordStatuses, UserEntity } from 'entities';
 import { Repository } from 'typeorm';
 import {
   CreateUserRequest,
@@ -52,7 +52,7 @@ export class UsersService {
     await this.asbtService.create({
       guid: savedUuid,
       pinpp: data.pinpp,
-      status: data.status,
+      status: RecordStatuses.ACTIVATION,
       doctype: data.doctype,
       serialnumber: data.serialNumber,
       accessRoles: data.accessRoles,
@@ -65,7 +65,7 @@ export class UsersService {
     const user = await this.usersRepository.save({
       id: savedUuid,
       pinpp: data.pinpp,
-      status: data.status,
+      status: RecordStatuses.ACTIVATION,
       login: data.login,
       password: hashedPassword,
       serialNumber: data.serialNumber,
@@ -113,18 +113,64 @@ export class UsersService {
     };
   }
 
-  async update(id: string, updateUserDto: UpdateUserRequest): Promise<void> {
-    await this.usersRepository.update(id, {
-      ...updateUserDto,
+  async update(data: UpdateUserRequest): Promise<void> {
+    const isExist = await this.usersRepository.findOne({
+      where: { id: data.guid },
+    });
+
+    if (!isExist) {
+      throw new NotFoundException(ErrorCodes.RECORD_NOT_FOUND);
+    }
+
+    await this.asbtService.create({
+      guid: data.guid,
+      pinpp: data.pinpp,
+      status: RecordStatuses.EDIT,
+      doctype: data.doctype,
+      serialnumber: data.serialNumber,
+      accessRoles: data.accessRoles,
+      login: data.login,
+      password: data.password,
+      dateFrom: data.dateFrom,
+      dateTill: data.dateTill,
+    });
+
+    await this.usersRepository.update(data.guid, {
+      pinpp: data.pinpp,
+      status: RecordStatuses.EDIT,
+      serialNumber: data.serialNumber,
+      accessRoles: data.accessRoles,
+      login: data.login,
+      password: data.password,
+      dateTill: data.dateTill,
       updatedAt: new Date(),
     });
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<void> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException(ErrorCodes.RECORD_NOT_FOUND);
+    }
+
+    await this.asbtService.create({
+      guid: user.id,
+      pinpp: user.pinpp,
+      status: RecordStatuses.DELETE,
+      doctype: 1,
+      serialnumber: user.serialNumber,
+      accessRoles: user.accessRoles,
+      login: user.login,
+      password: user.password,
+      dateFrom: user.createdAt,
+      dateTill: user.dateTill,
+    });
+
     await this.usersRepository.update(id, {
       deletedAt: new Date(),
     });
-
-    return 'ok';
   }
 }
