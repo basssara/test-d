@@ -6,13 +6,13 @@ import {
   GetPersonalDocumentResponse,
   GetPersonalDataResponse,
   GetPersonalDataWithPassportRequest,
-  GetPersonalDataWithPinflRequest,
   GetPhotoRequest,
   GetPhotoResponse,
 } from '@interfaces';
 import {
   BadRequestException,
   ForbiddenException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   OnModuleInit,
@@ -26,7 +26,6 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import { AsbtConfig } from 'config';
-import { Exception } from 'exception';
 import { formatDate, roleConvert, statusConvert } from 'helpers';
 
 @Injectable()
@@ -92,7 +91,9 @@ export class AsbtService implements OnModuleInit {
 
     if (response.data.AnswereId !== AsbtAnswers.OK) {
       console.log(response.data);
-      throw new InternalServerErrorException(ErrorCodes.INTERNAL_SERVER_ERROR);
+      throw new InternalServerErrorException(ErrorCodes.INTERNAL_SERVER_ERROR, {
+        cause: response.data,
+      });
     }
 
     return response.data;
@@ -102,18 +103,19 @@ export class AsbtService implements OnModuleInit {
    * @GET data from asbt
    */
 
-  async getPersonalDataWithPassport(
+  async getPersonalData(
     payload: GetPersonalDataWithPassportRequest,
   ): Promise<GetPersonalDataResponse> {
     const response = await this.#_axios.request<
       GetPersonalDataWithPassportRequest,
       AxiosResponse<GetPersonalDataResponse>
     >({
-      url: '/GetPersonFull',
+      url: 'Prefill/GetPersonFull',
       method: 'GET',
       params: {
         Doctype: payload.doctype,
         SerialNumber: payload.serialNumber,
+        pinpp: payload.pinpp,
         DateBirth: payload.dateBirth,
         Address: payload.address,
         Parrents: payload.parrents,
@@ -122,31 +124,31 @@ export class AsbtService implements OnModuleInit {
     return response.data;
   }
 
-  async getPersonalDataWithPinfl(
-    payload: GetPersonalDataWithPinflRequest,
-  ): Promise<GetPersonalDataResponse> {
-    const response = await this.#_axios.request<
-      GetPersonalDataWithPinflRequest,
-      AxiosResponse<GetPersonalDataResponse>
-    >({
-      url: '/GetPersonFull',
-      method: 'GET',
-      params: {
-        Pinpp: payload.pinpp,
-        Address: payload.address,
-        Parrents: payload.parrents,
-      },
-    });
+  // async getPersonalDataWithPinfl(
+  //   payload: GetPersonalDataWithPinflRequest,
+  // ): Promise<GetPersonalDataResponse> {
+  //   const response = await this.#_axios.request<
+  //     GetPersonalDataWithPinflRequest,
+  //     AxiosResponse<GetPersonalDataResponse>
+  //   >({
+  //     url: '/GetPersonFull',
+  //     method: 'GET',
+  //     params: {
+  //       Pinpp: payload.pinpp,
+  //       Address: payload.address,
+  //       Parrents: payload.parrents,
+  //     },
+  //   });
 
-    return response.data;
-  }
+  //   return response.data;
+  // }
 
   async getPersonalPhoto(payload: GetPhotoRequest): Promise<GetPhotoResponse> {
     const response = await this.#_axios.request<
       GetPhotoRequest,
       AxiosResponse<GetPhotoResponse>
     >({
-      url: '/GetPersonPhoto',
+      url: 'Prefill/GetPersonPhoto',
       method: 'GET',
       params: {
         Guid: payload.id,
@@ -163,7 +165,7 @@ export class AsbtService implements OnModuleInit {
       GetPersonalDocumentRequest,
       AxiosResponse<GetPersonalDocumentResponse>
     >({
-      url: '/GetPersonDocuments',
+      url: 'Prefill/GetPersonDocuments',
       method: 'GET',
       params: {
         Guid: payload.id,
@@ -246,11 +248,20 @@ export class AsbtService implements OnModuleInit {
           : new ForbiddenException(error.response.data);
       }
 
-      throw new Exception({
-        status: error.response?.status ?? 500,
-        message: error.response?.statusText ?? 'Internal Server Error',
-        details: error.response?.data,
+      console.log('Error:', {
+        status: error.response.status,
+        message: error.response.statusText,
+        details: error.response.data,
         exception: error.name,
+      });
+
+      throw new HttpException(error.response.data, error.response.status, {
+        cause: {
+          status: error.response?.status ?? 500,
+          message: error.response?.statusText ?? 'Internal Server Error',
+          details: error.response?.data,
+          exception: error.name,
+        },
       });
     }
 

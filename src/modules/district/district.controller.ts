@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { DistrictService } from './district.service';
 import { CreateDistrictDTO, UpdateDistrictDTO } from './dto/index';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Districts Service')
 @Controller({
   path: 'districts',
   version: '1',

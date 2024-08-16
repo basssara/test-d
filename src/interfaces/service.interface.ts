@@ -2,6 +2,7 @@ export interface GetPersonalDataWithPassportRequest {
   doctype: number;
   serialNumber: string;
   dateBirth: Date;
+  pinpp: string;
   address: boolean;
   parrents: boolean;
 }

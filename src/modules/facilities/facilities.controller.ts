@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { FacilitiesService } from './facilities.service';
 import { CreateFacilityDTO, UpdateFacilityDTO } from './dto/index';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Facilities Service')
 @Controller({
   path: 'facilities',
   version: '1',
