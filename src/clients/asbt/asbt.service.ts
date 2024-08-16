@@ -99,7 +99,7 @@ export class AsbtService {
       })
       .catch((err: AxiosError) => {
         console.log(err.response.data);
-        throw new HttpException(err.cause.message, err.response.status);
+        throw new HttpException(err.response.data, err.response.status);
       });
 
     return response.data;

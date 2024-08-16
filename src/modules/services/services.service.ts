@@ -15,8 +15,6 @@ export class ServicesService {
     private readonly serviceRepository: Repository<ServiceEntity>,
   ) {}
 
-  async getPersonalData() {}
-
   async create(data: Omit<CreateServiceRequest, 'userId'>): Promise<void> {
     await this.serviceRepository.save(data);
   }
