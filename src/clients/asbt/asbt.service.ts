@@ -1,4 +1,4 @@
-import { AsbtAnswers, ErrorCodes } from '@enums';
+import { AsbtAnswers, ErrorCodes, HttpStatus } from '@enums';
 import {
   AsbtCreateRequest,
   AsbtCreateResponse,
@@ -11,19 +11,30 @@ import {
   GetPhotoResponse,
 } from '@interfaces';
 import {
-  HttpException,
+  BadRequestException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  OnModuleInit,
+  RequestTimeoutException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
+import { AsbtConfig } from 'config';
+import { Exception } from 'exception';
 import { formatDate, roleConvert, statusConvert } from 'helpers';
 
 @Injectable()
-export class AsbtService {
+export class AsbtService implements OnModuleInit {
+  #_token: string;
+
   readonly #_axios: AxiosInstance;
-  readonly token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiIiwiVXNlcklkIjoiMTAwMTAzOCIsIlN1YnN5c3RlbSI6IjEiLCJMT0NBTCBBVVRIT1JJVFkiOiJBc2J0QXV0aDIuMFNlcnZlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IjQwMDAxMDAiLCJuYmYiOjE3MjM2OTY0NDcsImV4cCI6MTcyMzc4Mjg0NywiaXNzIjoiQXNidEF1dGgyLjBTZXJ2ZXIiLCJhdWQiOiJodHRwOi8vYXNidC51ei8ifQ.WOkL1KJ8GIw2UloyuCbmJ1CtBwFuDGOJZv2UqdVHUQ4';
+  readonly #_config: Omit<AsbtConfig, 'url' | 'timeout,'>;
 
   constructor(config: ConfigService) {
     this.#_axios = axios.create({
@@ -31,11 +42,25 @@ export class AsbtService {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
       },
       timeout: config.getOrThrow<number>('asbt.timeout'),
       validateStatus: (status: number): boolean => status > 199 && status < 300,
     });
+
+    this.#_config = {
+      login: config.getOrThrow<string>('asbt.login'),
+      password: config.getOrThrow<string>('asbt.password'),
+      currentSystem: config.getOrThrow<number>('asbt.currentSystem'),
+    };
+
+    this.#_axios.interceptors.request.use(
+      this.#_requestFulfilled.bind(this),
+      this.#_requestRejected.bind(this),
+    );
+    this.#_axios.interceptors.response.use(
+      this.#_responseFulfilled.bind(this),
+      this.#_responseRejected.bind(this),
+    );
   }
 
   /**
@@ -45,27 +70,25 @@ export class AsbtService {
   async create(
     payload: Omit<AsbtCreateRequest, 'facilityId'>,
   ): Promise<AsbtCreateResponse> {
-    const response = await this.#_axios
-      .request<AsbtCreateRequest, AxiosResponse<AsbtCreateResponse>>({
-        url: '/UserManagement/AddUser',
-        method: 'POST',
-        data: {
-          guid: payload.guid,
-          status: statusConvert(payload.status),
-          pinpp: payload.pinpp,
-          doctype: payload.doctype,
-          serialnumber: payload.serialnumber,
-          accessRoles: payload.accessRoles.map((role) => roleConvert(role)),
-          login: payload.login,
-          password: payload.password,
-          dateFrom: formatDate(new Date(), 'yyyy-MM-dd'),
-          dateTill: formatDate(payload.dateTill, 'yyyy-MM-dd'),
-        },
-      })
-      .catch((err: AxiosError) => {
-        console.log(err.response.data);
-        throw new HttpException(err.response.data, err.response.status);
-      });
+    const response = await this.#_axios.request<
+      AsbtCreateRequest,
+      AxiosResponse<AsbtCreateResponse>
+    >({
+      url: '/UserManagement/AddUser',
+      method: 'POST',
+      data: {
+        guid: payload.guid,
+        status: statusConvert(payload.status),
+        pinpp: payload.pinpp,
+        doctype: payload.doctype,
+        serialnumber: payload.serialnumber,
+        accessRoles: payload.accessRoles.map((role) => roleConvert(role)),
+        login: payload.login,
+        password: payload.password,
+        dateFrom: formatDate(new Date(), 'yyyy-MM-dd'),
+        dateTill: formatDate(payload.dateTill, 'yyyy-MM-dd'),
+      },
+    });
 
     if (response.data.AnswereId !== AsbtAnswers.OK) {
       console.log(response.data);
@@ -82,66 +105,53 @@ export class AsbtService {
   async getPersonalDataWithPassport(
     payload: GetPersonalDataWithPassportRequest,
   ): Promise<GetPersonalDataResponse> {
-    const response = await this.#_axios
-      .request<
-        GetPersonalDataWithPassportRequest,
-        AxiosResponse<GetPersonalDataResponse>
-      >({
-        url: '/GetPersonFull',
-        method: 'GET',
-        params: {
-          Doctype: payload.doctype,
-          SerialNumber: payload.serialNumber,
-          DateBirth: payload.dateBirth,
-          Address: payload.address,
-          Parrents: payload.parrents,
-        },
-      })
-      .catch((err: AxiosError) => {
-        console.log(err.response.data);
-        throw new HttpException(err.response.data, err.response.status);
-      });
-
+    const response = await this.#_axios.request<
+      GetPersonalDataWithPassportRequest,
+      AxiosResponse<GetPersonalDataResponse>
+    >({
+      url: '/GetPersonFull',
+      method: 'GET',
+      params: {
+        Doctype: payload.doctype,
+        SerialNumber: payload.serialNumber,
+        DateBirth: payload.dateBirth,
+        Address: payload.address,
+        Parrents: payload.parrents,
+      },
+    });
     return response.data;
   }
 
   async getPersonalDataWithPinfl(
     payload: GetPersonalDataWithPinflRequest,
   ): Promise<GetPersonalDataResponse> {
-    const response = await this.#_axios
-      .request<
-        GetPersonalDataWithPinflRequest,
-        AxiosResponse<GetPersonalDataResponse>
-      >({
-        url: '/GetPersonFull',
-        method: 'GET',
-        params: {
-          Pinpp: payload.pinpp,
-          Address: payload.address,
-          Parrents: payload.parrents,
-        },
-      })
-      .catch((err: AxiosError) => {
-        console.log(err.response.data);
-        throw new HttpException(err.response.data, err.response.status);
-      });
+    const response = await this.#_axios.request<
+      GetPersonalDataWithPinflRequest,
+      AxiosResponse<GetPersonalDataResponse>
+    >({
+      url: '/GetPersonFull',
+      method: 'GET',
+      params: {
+        Pinpp: payload.pinpp,
+        Address: payload.address,
+        Parrents: payload.parrents,
+      },
+    });
 
     return response.data;
   }
 
   async getPersonalPhoto(payload: GetPhotoRequest): Promise<GetPhotoResponse> {
-    const response = await this.#_axios
-      .request<GetPhotoRequest, AxiosResponse<GetPhotoResponse>>({
-        url: '/GetPersonPhoto',
-        method: 'GET',
-        params: {
-          Guid: payload.id,
-        },
-      })
-      .catch((err: AxiosError) => {
-        console.log(err.response.data);
-        throw new HttpException(err.response.data, err.response.status);
-      });
+    const response = await this.#_axios.request<
+      GetPhotoRequest,
+      AxiosResponse<GetPhotoResponse>
+    >({
+      url: '/GetPersonPhoto',
+      method: 'GET',
+      params: {
+        Guid: payload.id,
+      },
+    });
 
     return response.data;
   }
@@ -149,22 +159,101 @@ export class AsbtService {
   async getPersonalDocument(
     payload: GetPersonalDocumentRequest,
   ): Promise<GetPersonalDocumentResponse> {
-    const response = await this.#_axios
-      .request<
-        GetPersonalDocumentRequest,
-        AxiosResponse<GetPersonalDocumentResponse>
-      >({
-        url: '/GetPersonDocuments',
-        method: 'GET',
-        params: {
-          Guid: payload.id,
-        },
-      })
-      .catch((err: AxiosError) => {
-        console.log(err.response.data);
-        throw new HttpException(err.response.data, err.response.status);
-      });
+    const response = await this.#_axios.request<
+      GetPersonalDocumentRequest,
+      AxiosResponse<GetPersonalDocumentResponse>
+    >({
+      url: '/GetPersonDocuments',
+      method: 'GET',
+      params: {
+        Guid: payload.id,
+      },
+    });
 
     return response.data;
+  }
+
+  async onModuleInit(): Promise<void> {
+    await this.#_auth();
+  }
+
+  /**
+   * @Private methods
+   */
+
+  async #_auth(): Promise<void> {
+    const { data } = await this.#_axios.request({
+      url: '/DUK_AUTH/agency/token',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        login: this.#_config.login,
+        password: this.#_config.password,
+        currentSystem: this.#_config.currentSystem,
+      },
+    });
+
+    if (!data.access_token) {
+      throw new InternalServerErrorException('Failed to get access token.');
+    }
+
+    this.#_token = data.access_token;
+  }
+
+  #_requestFulfilled(
+    config: InternalAxiosRequestConfig,
+  ): InternalAxiosRequestConfig {
+    if (this.#_token) {
+      config.headers.set('Authorization', `Bearer ${this.#_token}`);
+    }
+
+    return config;
+  }
+
+  #_requestRejected(error: unknown): Promise<never> {
+    return Promise.reject(error);
+  }
+
+  #_responseFulfilled(response: AxiosResponse): AxiosResponse {
+    if (response.data.error) {
+      throw new BadRequestException(response.data.error.message);
+    }
+
+    return response;
+  }
+
+  async #_responseRejected(error: unknown): Promise<AxiosResponse> {
+    console.log('aloqa error:', error);
+
+    if (axios.isCancel(error)) {
+      throw new RequestTimeoutException(error.message);
+    }
+
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        if (error.config?.headers.has('Retry') !== true) {
+          await this.#_auth();
+
+          error.config.headers.set('Retry', true);
+
+          return this.#_axios.request(error.config);
+        }
+
+        throw error.response.status === HttpStatus.UNAUTHORIZED
+          ? new UnauthorizedException(error.response.data)
+          : new ForbiddenException(error.response.data);
+      }
+
+      throw new Exception({
+        status: error.response?.status ?? 500,
+        message: error.response?.statusText ?? 'Internal Server Error',
+        details: error.response?.data,
+        exception: error.name,
+      });
+    }
+
+    throw new InternalServerErrorException(error);
   }
 }

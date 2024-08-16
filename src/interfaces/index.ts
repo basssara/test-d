@@ -48,3 +48,4 @@ export type {
   CreateDistrictRequest,
   UpdateDistrictRequest,
 } from './district.interface';
+export type { ExceptionParams } from './exception-params.interface';
