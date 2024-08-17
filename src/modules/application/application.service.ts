@@ -54,10 +54,8 @@ export class ApplicationService {
       take: limit
     });
 
-    // Calculate the total number of applications
     let applicationCount = 0;
 
-    // Map data and count applications
     const data = regions.map(region => {
       let regionApplicationCount = 0;
       const districts = region?.districts?.map(district => {
