@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { ApiTags } from '@nestjs/swagger';
-import { createApplicationDTO, updateApplicationDto } from './dto';
+import { createApplicationDTO, QueryApplicationDTO, updateApplicationDto } from './dto';
 
 @ApiTags('Application Service')
 @Controller({
@@ -26,17 +26,13 @@ export class ApplicationController {
     console.log(data);
     return this.applicationService.create({
       ...data,
-      applicationId: 1,
       amount: 1,
     });
   }
 
   @Get()
-  findAll(
-    @Query('page') page: number,
-    @Query('limit') limit: number
-  ) {
-    return this.applicationService.findAll({ page, limit });
+  findAll(@Query() queryDTO: QueryApplicationDTO) {
+    return this.applicationService.findAll(queryDTO);
   }
 
   @Get(':id')

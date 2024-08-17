@@ -39,6 +39,7 @@ export type {
   SendApplicationRequest,
   SendApplicationResponse,
   UpdateApplicationRequest,
+  FindApplicationResponse
 } from './application.interface';
 export type { JwtModel } from './jwt.interface';
 export type { AsbtCreateRequest, AsbtCreateResponse } from './asbt.interface';
@@ -48,3 +49,6 @@ export type {
   UpdateDistrictRequest,
   FindDistrictResponse
 } from './district.interface';
+export type {
+  QueryApplication
+} from './query.interface';

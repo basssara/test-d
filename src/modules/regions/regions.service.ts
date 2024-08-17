@@ -35,7 +35,7 @@ export class RegionsService {
       result.push({
         id: region?.id,
         regionName: region?.regionName,
-        districts: region?.districts.map((district) => ({
+        districts: region?.districts?.map((district) => ({
           id: district?.id,
           districtName: district?.districtName,
           facility: {
