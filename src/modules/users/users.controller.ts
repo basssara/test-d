@@ -88,10 +88,10 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Get('validate')
-  validate(@Param('login') login: string) {
-    return this.usersService.validate({ login });
-  }
+  // @Get('validate')
+  // validate(@Param('login') login: string) {
+  //   return this.usersService.validate({ login });
+  // }
 
   @Patch(':id')
   @UseGuards(CheckPermissionGuard)

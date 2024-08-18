@@ -67,7 +67,6 @@ export class UsersService {
     const user = await this.usersRepository.save({
       id: savedUuid,
       pinpp: data.pinpp,
-      status: RecordStatuses.ACTIVATION,
       login: data.login,
       password: hashedPassword,
       serialNumber: data.serialNumber,
@@ -147,7 +146,6 @@ export class UsersService {
 
     await this.usersRepository.update(data.guid, {
       pinpp: data.pinpp,
-      status: RecordStatuses.EDIT,
       serialNumber: data.serialNumber,
       accessRoles: data.accessRoles,
       login: data.login,

@@ -22,6 +22,9 @@ export class GetPersonalDataWithPassportRequestDto
   @IsNotEmpty()
   dateBirth: Date;
 
+  @IsNotEmpty()
+  pinpp: string;
+
   @IsBoolean()
   @IsNotEmpty()
   address: boolean;

@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { FacilitiesService } from './facilities.service';
 import { CreateFacilityDTO, UpdateFacilityDTO } from './dto/index';
+
 import { ApiTags, ApiResponse, ApiBody, ApiParam, ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
 import {
   ForbiddenResponse,
@@ -27,6 +28,9 @@ import { GetOneFacilityResponseSwagger } from 'swagger/facilities/getone-facilit
 
 @ApiTags('Facilities Service')
 
+
+
+@ApiTags('Facilities Service')
 @Controller({
   path: 'facilities',
   version: '1',

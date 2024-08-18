@@ -52,3 +52,6 @@ export type {
 export type {
   QueryApplication
 } from './query.interface';
+
+export type { ExceptionParams } from './exception-params.interface';
+

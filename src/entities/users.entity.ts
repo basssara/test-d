@@ -24,13 +24,6 @@ export class UserEntity implements Omit<UserModel, 'dateFrom'> {
   @Column({ nullable: true })
   pinpp: string;
 
-  @Column({
-    type: 'enum',
-    enum: RecordStatuses,
-    default: RecordStatuses.ACTIVATION,
-  })
-  status: RecordStatuses;
-
   @Column({ type: 'varchar' })
   login: string;
 
@@ -76,4 +69,5 @@ export class UserEntity implements Omit<UserModel, 'dateFrom'> {
     nullable: true,
   })
   deletedAt: Date;
+  status: any;
 }
