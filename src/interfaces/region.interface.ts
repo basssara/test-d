@@ -44,7 +44,3 @@ export interface FindRegionResponse {
   regionName: string;
   districts: Districts[];
 }
-
-export interface DeleteRegionRequest {
-  id: string;
-}

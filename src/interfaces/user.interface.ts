@@ -50,6 +50,16 @@ export interface UpdateUserRequest {
   dateTill?: Date;
 }
 
-export interface DeleteUserRequest {
+export interface FindUserResponse {
   id: string;
+  status: RecordStatuses;
+  pinpp: string;
+  serialNumber: string;
+  accessRoles: string[];
+  login: string;
+  password: string;
+  dateTill: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
 }

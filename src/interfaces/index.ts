@@ -5,14 +5,12 @@ export type {
   GetUserRequest,
   GetUserResponse,
   UpdateUserRequest,
-  DeleteUserRequest,
+  FindUserResponse
 } from './user.interface';
 export type {
   RegionModel,
-  FindRegionRequest,
   CreateRegionRequest,
   UpdateRegionRequest,
-  DeleteRegionRequest,
   FindRegionResponse,
 } from './region.interface';
 export type {
@@ -34,12 +32,14 @@ export type {
   FacilitiesModel,
   CreateFacilityRequest,
   UpdateFacilityRequest,
+  FindFacilityResponse
 } from './facilities.interface';
 export type {
   ApplicationModel,
   SendApplicationRequest,
   SendApplicationResponse,
   UpdateApplicationRequest,
+  FindApplicationResponse
 } from './application.interface';
 export type { JwtModel } from './jwt.interface';
 export type { AsbtCreateRequest, AsbtCreateResponse } from './asbt.interface';
@@ -47,5 +47,11 @@ export type {
   DistrictsModel,
   CreateDistrictRequest,
   UpdateDistrictRequest,
+  FindDistrictResponse
 } from './district.interface';
+export type {
+  QueryApplication
+} from './query.interface';
+
 export type { ExceptionParams } from './exception-params.interface';
+

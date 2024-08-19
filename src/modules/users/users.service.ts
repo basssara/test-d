@@ -11,11 +11,13 @@ import {
   GetUserRequest,
   GetUserResponse,
   UpdateUserRequest,
+  FindUserResponse
 } from '@interfaces';
 import * as bcrypt from 'bcrypt';
 import { AsbtService } from 'clients';
 import { uuid } from 'helpers';
 import { ErrorCodes } from '@enums';
+import { skip, take } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -25,7 +27,7 @@ export class UsersService {
     @InjectRepository(FacilityEntity)
     private readonly facilityRepository: Repository<FacilityEntity>,
     private readonly asbtService: AsbtService,
-  ) {}
+  ) { }
 
   async create(data: CreateUserRequest): Promise<void> {
     const saltOrRounds = 10;
@@ -77,15 +79,23 @@ export class UsersService {
     });
   }
 
-  async findAll() {
-    const users = await this.usersRepository.find();
-    return users;
+  async findAll(pagination: any): Promise<FindUserResponse[]> {
+
+    const { page = 1, limit = 10 } = pagination
+
+    const result: FindUserResponse[] = await this.usersRepository.find(
+      {
+        skip: (page - 1) * limit,
+        take: limit
+      }
+    );
+    return result;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<FindUserResponse> {
     const user = await this.usersRepository.findOne({
       where: {
-        id: id,
+        id: id
       },
     });
 

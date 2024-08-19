@@ -21,6 +21,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios, {
+  AxiosError,
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
@@ -69,26 +70,32 @@ export class AsbtService implements OnModuleInit {
   async create(
     payload: Omit<AsbtCreateRequest, 'facilityId'>,
   ): Promise<AsbtCreateResponse> {
-    const response = await this.#_axios.request<
-      AsbtCreateRequest,
-      AxiosResponse<AsbtCreateResponse>
-    >({
-      url: '/UserManagement/AddUser',
-      method: 'POST',
-      data: {
-        guid: payload.guid,
-        status: statusConvert(payload.status),
-        pinpp: payload.pinpp,
-        doctype: payload.doctype,
-        serialnumber: payload.serialnumber,
-        accessRoles: payload.accessRoles.map((role) => roleConvert(role)),
-        login: payload.login,
-        password: payload.password,
-        dateFrom: formatDate(new Date(), 'yyyy-MM-dd'),
-        dateTill: formatDate(payload.dateTill, 'yyyy-MM-dd'),
-      },
-    });
-    console.log(response.data);
+    const response = await this.#_axios
+      .request<AsbtCreateRequest, AxiosResponse<AsbtCreateResponse>>({
+        url: '/UserManagement/AddUser',
+        method: 'POST',
+        data: {
+          guid: payload.guid,
+          status: statusConvert(payload.status),
+          pinpp: payload.pinpp,
+          doctype: payload.doctype,
+          serialnumber: payload.serialnumber,
+          accessRoles: payload.accessRoles.map((role) => roleConvert(role)),
+          login: payload.login,
+          password: payload.password,
+          dateFrom: formatDate(new Date(), 'yyyy-MM-dd'),
+          dateTill: formatDate(payload.dateTill, 'yyyy-MM-dd'),
+        },
+      })
+      .catch((err: AxiosError) => {
+        console.log(err.response.data);
+        throw new HttpException(err.response.data, err.response.status);
+      });
+
+    if (response.data.AnswereId !== AsbtAnswers.OK) {
+      console.log(response.data);
+      throw new InternalServerErrorException(ErrorCodes.INTERNAL_SERVER_ERROR);
+    }
 
     return response.data;
   }

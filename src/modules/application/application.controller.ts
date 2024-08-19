@@ -6,10 +6,11 @@ import {
   Get,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { ApiTags } from '@nestjs/swagger';
-import { createApplicationDTO, updateApplicationDto } from './dto';
+import { createApplicationDTO, QueryApplicationDTO, updateApplicationDto } from './dto';
 
 @ApiTags('Application Service')
 @Controller({
@@ -17,7 +18,7 @@ import { createApplicationDTO, updateApplicationDto } from './dto';
   version: '1',
 })
 export class ApplicationController {
-  constructor(private readonly applicationService: ApplicationService) {}
+  constructor(private readonly applicationService: ApplicationService) { }
 
   @Post()
   // applicationId va amuntni qo'lda berib qo'yganman to'g'irlash kerak bo'ladi
@@ -25,14 +26,13 @@ export class ApplicationController {
     console.log(data);
     return this.applicationService.create({
       ...data,
-      applicationId: 1,
       amount: 1,
     });
   }
 
   @Get()
-  findAll() {
-    return this.applicationService.findAll();
+  findAll(@Query() queryDTO: QueryApplicationDTO) {
+    return this.applicationService.findAll(queryDTO);
   }
 
   @Get(':id')

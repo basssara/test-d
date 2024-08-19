@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  Query,
   // UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -28,6 +29,7 @@ import {
 import { Roles } from 'decorators';
 import { Roles as Role } from '@enums';
 import { CheckPermissionGuard } from 'guards';
+// import { CheckPermissionGuard } from 'guards';
 
 @ApiTags('User Service')
 @Controller({
@@ -35,11 +37,13 @@ import { CheckPermissionGuard } from 'guards';
   version: '1',
 })
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
-  // @UseGuards(CheckPermissionGuard)
-  // @Roles(Role.SUPER_ADMIN, Role.ADMIN)
+  @UseGuards(CheckPermissionGuard)
+  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
+  @UseGuards(CheckPermissionGuard)
+  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiBody({
     type: AsbtCreateRequestSwagger,
@@ -69,13 +73,16 @@ export class UsersController {
 
   @Get()
   // @UseGuards(CheckPermissionGuard)
-  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
-  findAll() {
-    return this.usersService.findAll();
+  // @Roles(Role.SUPER_ADMIN, Role.ADMIN)
+  findAll(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.usersService.findAll({ page, limit });
   }
 
   @Get(':id')
-  // @UseGuards(CheckPermissionGuard)
+  @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
@@ -87,7 +94,7 @@ export class UsersController {
   // }
 
   @Patch(':id')
-  // @UseGuards(CheckPermissionGuard)
+  @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   update(
     @Param('id') id: string,
@@ -97,7 +104,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  // @UseGuards(CheckPermissionGuard)
+  @UseGuards(CheckPermissionGuard)
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   remove(@Param('id') id: string): Promise<void> {
     return this.usersService.remove(id);

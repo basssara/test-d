@@ -69,4 +69,5 @@ export class UserEntity implements Omit<UserModel, 'dateFrom'> {
     nullable: true,
   })
   deletedAt: Date;
+  status: any;
 }

@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FacilityEntity, RegionEntity, DistrictEntity } from 'entities';
 import { Repository } from 'typeorm';
-import { CreateDistrictRequest } from '@interfaces';
+import { CreateDistrictRequest, FindDistrictResponse } from '@interfaces';
 
 @Injectable()
 export class DistrictService {
@@ -15,24 +15,82 @@ export class DistrictService {
 
     @InjectRepository(RegionEntity)
     private readonly RegionRepository: Repository<RegionEntity>,
-  ) {}
+  ) { }
 
-  async findAll() {
-    const districts = await this.DistrictRepository.find();
-    return districts;
+  async findAll(pagination: any): Promise<FindDistrictResponse[]> {
+    const result: FindDistrictResponse[] = [];
+    const { page = 1, limit = 10 } = pagination;
+
+
+    const districts = await this.DistrictRepository.find(
+      {
+        relations: {
+          facility: { user: true },
+        },
+        skip: (page - 1) * limit,
+        take: limit
+      }
+    );
+
+    for (const district of districts) {
+      result.push({
+        id: district?.id,
+        districtName: district?.districtName,
+        facility: {
+          id: district?.facility?.id,
+          facilityName: district?.facility?.facilityName,
+          user: {
+            id: district?.facility?.user?.id,
+            status: district?.facility?.user?.status,
+            pinpp: district?.facility?.user?.pinpp,
+            serialNumber: district?.facility?.user?.serialNumber,
+            roles: district?.facility?.user?.accessRoles,
+            login: district?.facility?.user?.login,
+            password: district?.facility?.user?.password,
+            dateFrom: district?.facility?.user?.createdAt,
+            dateTill: district?.facility?.user?.dateTill,
+          },
+        },
+      })
+    }
+    return result
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<FindDistrictResponse> {
     const district = await this.DistrictRepository.findOne({
       where: {
         id: id,
       },
+
+      relations: {
+        facility: { user: true },
+      },
     });
 
-    if (!district || !district.id) {
+    if (!district) {
       throw new NotFoundException('District not found!');
     }
-    return district;
+
+    const result: FindDistrictResponse = {
+      id: district?.id,
+      districtName: district?.districtName,
+      facility: {
+        id: district?.facility?.id,
+        facilityName: district?.facility?.facilityName,
+        user: {
+          id: district?.facility?.user?.id,
+          status: district?.facility?.user?.status,
+          pinpp: district?.facility?.user?.pinpp,
+          serialNumber: district?.facility?.user?.serialNumber,
+          roles: district?.facility?.user?.accessRoles,
+          login: district?.facility?.user?.login,
+          password: district?.facility?.user?.password,
+          dateFrom: district?.facility?.user?.createdAt,
+          dateTill: district?.facility?.user?.dateTill,
+        },
+      },
+    }
+    return result;
   }
 
   async create(

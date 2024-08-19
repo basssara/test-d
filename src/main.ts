@@ -3,7 +3,7 @@ import { App } from './app';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { json } from 'express';
 import { appConfig, swaggerConfig } from 'config';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType, } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {

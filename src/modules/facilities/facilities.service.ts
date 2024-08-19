@@ -1,5 +1,5 @@
 import { ErrorCodes } from '@enums';
-import { CreateFacilityRequest, UpdateFacilityRequest } from '@interfaces';
+import { CreateFacilityRequest, FindFacilityResponse, UpdateFacilityRequest } from '@interfaces';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FacilityEntity, RegionEntity } from 'entities';
@@ -12,31 +12,73 @@ export class FacilitiesService {
     private readonly facilityRepository: Repository<FacilityEntity>,
     @InjectRepository(RegionEntity)
     private readonly regionRepository: Repository<RegionEntity>,
-  ) {}
+  ) { }
 
-  async findAll() {
+  async findAll(pagination: any): Promise<FindFacilityResponse[]> {
+    const result: FindFacilityResponse[] = []
+    const { page = 1, limit = 10 } = pagination
+
     const facilities = await this.facilityRepository.find({
-      where: {
-        deletedAt: null,
+      relations: {
+        user: true
       },
+      skip: (page - 1) * limit,
+      take: limit
     });
 
-    return facilities;
+    for (const facility of facilities) {
+      result.push({
+        id: facility?.id,
+        facilityName: facility?.facilityName,
+        users: {
+          id: facility?.user?.id,
+          status: facility?.user?.status,
+          pinpp: facility?.user?.pinpp,
+          serialNumber: facility?.user?.serialNumber,
+          roles: facility?.user?.accessRoles,
+          login: facility?.user?.login,
+          password: facility?.user?.password,
+          dateFrom: facility?.user?.createdAt,
+          dateTill: facility?.user?.dateTill
+        }
+      })
+    }
+
+    return result;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<FindFacilityResponse> {
     const facility = await this.facilityRepository.findOne({
       where: {
         id: id,
         deletedAt: null,
       },
+      relations: {
+        user: true
+      }
     });
 
-    if (!facility.id) {
+    if (!facility) {
       throw new NotFoundException('Facility not found');
     }
 
-    return facility;
+    const result: FindFacilityResponse = {
+      id: facility?.id,
+      facilityName: facility?.facilityName,
+      users: {
+        id: facility?.user?.id,
+        status: facility?.user?.status,
+        pinpp: facility?.user?.pinpp,
+        serialNumber: facility?.user?.serialNumber,
+        roles: facility?.user?.accessRoles,
+        login: facility?.user?.login,
+        password: facility?.user?.password,
+        dateFrom: facility?.user?.createdAt,
+        dateTill: facility?.user?.dateTill
+      }
+    };
+
+    return result;
   }
 
   async create(data: CreateFacilityRequest): Promise<void> {

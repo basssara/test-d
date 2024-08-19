@@ -7,7 +7,7 @@ import { signJwt } from 'helpers';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   async login(data: LoginRequest): Promise<LoginResponse> {
     const user = await this.usersService.validate({ login: data.login });
@@ -44,5 +44,5 @@ export class AuthService {
     };
   }
 
-  async logout(): Promise<void> {}
+  async logout(): Promise<void> { }
 }

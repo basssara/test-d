@@ -17,10 +17,10 @@ export class ApplicationEntity implements Pick<ApplicationModel, 'pinfl'> {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    type: 'int',
-  })
-  applicationId: number;
+  // @Column({
+  //   type: 'int',
+  // })
+  // applicationId: number;
 
   @Column()
   pinfl: string;

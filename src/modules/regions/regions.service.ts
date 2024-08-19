@@ -4,7 +4,7 @@ import { RegionEntity } from 'entities';
 import {
   CreateRegionRequest,
   FindRegionResponse,
-  UpdateRegionRequest,
+  UpdateRegionRequest
 } from '@interfaces';
 import { Repository } from 'typeorm';
 
@@ -13,10 +13,11 @@ export class RegionsService {
   constructor(
     @InjectRepository(RegionEntity)
     private readonly regionRepository: Repository<RegionEntity>,
-  ) {}
+  ) { }
 
-  async findAll(): Promise<FindRegionResponse[]> {
+  async findAll(pagination: any): Promise<FindRegionResponse[]> {
     const result: FindRegionResponse[] = [];
+    const { page = 1, limit = 10 } = pagination;
 
     const regions = await this.regionRepository.find({
       where: { deletedAt: null },
@@ -25,18 +26,21 @@ export class RegionsService {
           facility: { user: true },
         },
       },
+      skip: (page - 1) * limit,
+      take: limit
+
     });
 
     for (const region of regions) {
       result.push({
-        id: region.id,
-        regionName: region.regionName,
-        districts: region.districts.map((district) => ({
-          id: district.id,
-          districtName: district.districtName,
+        id: region?.id,
+        regionName: region?.regionName,
+        districts: region?.districts?.map((district) => ({
+          id: district?.id,
+          districtName: district?.districtName,
           facility: {
-            id: district.facility.id,
-            facilityName: district.facility.facilityName,
+            id: district?.facility?.id,
+            facilityName: district?.facility?.facilityName,
             user: {
               id: district.facility.user.id,
               pinpp: district.facility.user.pinpp,
@@ -52,22 +56,51 @@ export class RegionsService {
       });
     }
 
-    return result;
+    return result
   }
 
   async findOne(id: string) {
+
     const region = await this.regionRepository.findOne({
       where: {
-        id: id,
+        id,
       },
-      relations: { districts: true },
-    });
+      relations: {
+        districts: {
+          facility: { user: true },
+        },
+      },
+    })
 
-    if (!region.id) {
-      return new NotFoundException('Region not found');
+    if (!region) {
+      throw new NotFoundException('Region not found');
     }
 
-    return region;
+
+    const result: FindRegionResponse = {
+      id: region?.id,
+      regionName: region?.regionName,
+      districts: region?.districts.map((district) => ({
+        id: district?.id,
+        districtName: district?.districtName,
+        facility: {
+          id: district?.facility?.id,
+          facilityName: district?.facility?.facilityName,
+          user: {
+            id: district?.facility?.user?.id,
+            pinpp: district?.facility?.user?.pinpp,
+            serialNumber: district?.facility?.user?.serialNumber,
+            roles: district?.facility?.user?.accessRoles,
+            login: district?.facility?.user?.login,
+            password: district?.facility?.user?.password,
+            dateFrom: district?.facility?.user?.createdAt,
+            dateTill: district?.facility?.user?.dateTill,
+          },
+        },
+      })),
+    }
+
+    return result;
   }
 
   async create(dto: CreateRegionRequest): Promise<RegionEntity> {
